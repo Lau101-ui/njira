@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Njira | Creative AI tools for Malawi</title>
+<meta name="description" content="Njira gathers free and low-cost AI tools for video, photos, audio and writing, made for creators in Malawi.">
+<meta name="theme-color" content="#061a22"><meta name="color-scheme" content="dark">
+<link rel="canonical" href="/">
+<meta property="og:title" content="Njira | Creative AI tools for Malawi"><meta property="og:type" content="website">
+<meta property="og:description" content="Free and low-cost AI tools for video, photos, audio and writing, in one place.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23061a22'/%3E%3Cpath d='M8 26C8 9 22 24 24 7' stroke='%23f5b83d' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#061a22;--ink:#eaf2ee;--mut:#a3bbb4;--sun:#f5b83d;--reed:#7fb069;--line:#1f3a43;--card:#0b2530}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 Figtree,system-ui,sans-serif}
+body.lock{overflow:hidden}
+h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;line-height:1.04;letter-spacing:-.03em;margin:0}
+a{color:inherit}:focus-visible{outline:2px solid var(--sun);outline-offset:3px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;z-index:99;background:var(--sun);color:#1a1405;padding:8px 12px}
+header{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;gap:22px;padding:calc(14px + env(safe-area-inset-top,0px)) 24px 14px;background:linear-gradient(var(--bg) 40%,#061a2200)}
+.brand{display:flex;align-items:center;gap:10px;font:700 24px 'Bricolage Grotesque',system-ui;text-decoration:none;margin-right:auto}
+.brand svg,.brand img{height:30px;width:auto}
+nav{display:flex;gap:22px;font-size:15px}
+nav a{text-decoration:none;color:var(--mut);padding:6px 0;border-bottom:2px solid transparent}
+nav a.on,nav a:hover{color:var(--ink);border-color:var(--sun)}
+.lang{display:flex;border:1px solid var(--line)}
+.lang button{background:none;border:0;color:var(--mut);padding:6px 11px;font:inherit;font-size:14px;cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--sun);color:#1a1405}
+.btn{display:inline-block;background:var(--sun);color:#1a1405;padding:14px 22px;border:0;border-radius:3px;font:600 16px Figtree,system-ui,sans-serif;text-decoration:none;cursor:pointer;margin-right:10px}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--mut)}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:none}
+.home-on #gl{display:block}.fallback #gl{display:none!important}
+.fallback.home-on{background:radial-gradient(ellipse at 75% 40%,#0f4a52,#061a22 65%)}
+main{position:relative;z-index:2}.view{display:none}.view.on{display:block}
+.chap{min-height:100vh;display:flex;align-items:center;padding:120px 24px 60px max(24px,calc((100vw - 1200px)/2))}
+.chap .in{max-width:540px;padding:26px;background:#061a22b8;backdrop-filter:blur(6px)}
+.chap h1{font-size:clamp(46px,7.5vw,100px)}.chap h2{font-size:clamp(36px,5vw,68px)}
+.chap p{color:var(--mut);margin:18px 0 26px;font-size:18px}
+#prog{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:15;display:none;flex-direction:column;gap:10px;align-items:flex-end}
+#prog button{width:24px;height:5px;background:var(--line);border:0;padding:0;cursor:pointer;transition:width .2s,background .2s}
+#prog button.on{background:var(--sun);width:44px}
+#cnt{position:fixed;right:20px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:15;font-size:14px;color:var(--mut);display:none}
+.home-on #prog{display:flex}.home-on #cnt{display:block}
+.page{padding:140px 24px 90px;max-width:1200px;margin:auto;min-height:100vh}
+.page h1{font-size:clamp(40px,6vw,76px);margin-bottom:14px}.page>p.lead{color:var(--mut);max-width:620px;margin:0}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin:30px 0 24px;align-items:center}
+.chip{background:none;border:1px solid var(--line);color:var(--mut);padding:9px 15px;border-radius:3px;font:inherit;font-size:15px;cursor:pointer}
+.chip[aria-pressed=true]{border-color:var(--sun);color:var(--ink);background:var(--card)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);padding:22px;border-radius:4px;display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:24px}.card p{margin:0;color:var(--mut);font-size:15px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--ink)}
+.tags span{border:1px solid var(--line);padding:2px 8px}.tags .free{border-color:var(--reed);color:var(--reed)}
+.card a{margin-top:auto;color:var(--sun);font-weight:600;font-size:15px}
+.empty{color:var(--mut);padding:30px 0}
+.prose{max-width:720px}.prose h2{font-size:28px;margin:38px 0 8px}.prose p,.prose li{color:var(--mut)}
+.note{border-left:3px solid var(--sun);padding:8px 14px;background:var(--card);color:var(--ink)!important;margin:22px 0}
+footer{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:12px 26px;padding:26px 24px calc(26px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--bg);font-size:14px;color:var(--mut)}
+footer a{text-decoration:none}footer a:hover{color:var(--ink)}
+#ld{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+#pc{font:700 clamp(60px,14vw,150px)/1 'Bricolage Grotesque',system-ui;color:var(--sun)}
+#skip{background:none;border:0;color:var(--mut);text-decoration:underline;font:inherit;cursor:pointer;position:absolute;bottom:calc(30px + env(safe-area-inset-bottom,0px))}
+@media(max-width:640px){header{flex-wrap:wrap;gap:8px 14px;padding-left:16px;padding-right:16px}nav{order:3;width:100%;gap:18px}.chap{align-items:flex-end;padding:150px 16px 40px}.chap .in{padding:20px}.page{padding-top:170px}#prog{right:10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="ld"><div id="pc">0%</div><button class="btn" id="go" hidden data-t="enter">Enter site</button><button id="skip" data-t="skipi">Skip the introduction</button></div>
+<header><a class="brand" id="brand" href="#/" aria-label="Njira home"></a>
+<nav aria-label="Main"><a href="#/" data-v="home" data-t="n1">Home</a><a href="#/tools" data-v="tools" data-t="n2">Tools</a><a href="#/pricing" data-v="pricing" data-t="n3">Pricing</a></nav>
+<div class="lang" role="group" aria-label="Language"><button data-l="en" aria-pressed="true">EN</button><button data-l="ny" aria-pressed="false">CH</button></div></header>
+<canvas id="gl" aria-label="Interactive 3D path linking a camera, a picture, a sound wave and text"></canvas>
+<div id="prog" aria-label="Chapters"></div><div id="cnt" aria-live="polite"></div>
+<main id="main">
+<div class="view on" id="v-home">
+<section class="chap" data-l="Start"><div class="in"><h1 data-t="h0">One path to every creative tool.</h1><p data-t="s0">Njira gathers free and low-cost AI tools for video, photos, audio and writing, made for creators in Malawi.</p><a class="btn" href="#/tools" data-t="cta">Browse tools</a><a class="btn ghost" href="#c1" data-t="sc">Scroll to explore</a></div></section>
+<section class="chap" id="c1" data-l="Video"><div class="in"><h2 data-t="h1">Edit video faster.</h2><p data-t="p1">Auto captions, cuts and colour in editors that run on a phone or a modest laptop. Several are free.</p><a class="btn" href="#/tools/video" data-t="b1">See video tools</a></div></section>
+<section class="chap" data-l="Images"><div class="in"><h2 data-t="h2">Make and fix images.</h2><p data-t="p2">Design posters and retouch photos, many of them in the browser with no install.</p><a class="btn" href="#/tools/image" data-t="b2">See image tools</a></div></section>
+<section class="chap" data-l="Audio"><div class="in"><h2 data-t="h3">Clean up your sound.</h2><p data-t="p3">Record, remove noise and generate voiceovers for your edits.</p><a class="btn" href="#/tools/audio" data-t="b3">See audio tools</a></div></section>
+<section class="chap" data-l="Writing"><div class="in"><h2 data-t="h4">Write the script. Ship the post.</h2><p data-t="p4">Draft scripts, captions and client messages, then pick the free tier that fits your data budget.</p><a class="btn" href="#/tools/words" data-t="b4">See writing tools</a><a class="btn ghost" href="#/tools" data-t="b5">All tools</a></div></section>
+</div>
+<div class="view" id="v-tools"><div class="page"><h1 data-t="n2">Tools</h1><p class="lead" data-t="tl">Free and low-cost tools picked for creators. Plans and prices change, so check each tool before you pay.</p>
+<div class="filters" id="filters"></div><div class="grid" id="grid"></div></div></div>
+<div class="view" id="v-pricing"><div class="page prose"><h1 data-t="n3">Pricing</h1><p class="lead">Browsing Njira is free. Each tool sets its own price, so check it before you pay.</p>
+<h2>Kwacha prices</h2><p>Njira plans to show estimated MWK prices next to each paid tool. This is not live yet.</p>
+<h2>Mobile money</h2><p>Payment guides for Airtel Money and TNM Mpamba are planned. Njira does not take payments today.</p>
+<h2>Njira plans</h2><p>Njira's own pricing has not been decided.</p></div></div>
+<div class="view" id="v-terms"><div class="page prose"><h1>Terms and Conditions</h1><p class="note">Draft for development. Have a lawyer review this before launch.</p>
+<h2>Using Njira</h2><p>Njira is a directory that helps creators find tools. You may browse it for personal or business use.</p>
+<h2>Third-party tools</h2><p>Tools listed on Njira belong to other companies. We do not control their prices, features or terms. Check each tool's own terms before you sign up or pay.</p>
+<h2>No guarantees</h2><p>We try to keep listings accurate but they may be out of date. Njira is provided as is, without warranties.</p>
+<h2>Changes</h2><p>We may update these terms. The latest version is always on this page.</p>
+<h2>Contact</h2><p>Questions about these terms: use the contact link in the footer.</p></div></div>
+<div class="view" id="v-privacy"><div class="page prose"><h1>Privacy Policy</h1><p class="note">Draft for development. Have a lawyer review this before launch.</p>
+<h2>What we collect</h2><p>This version has no accounts and no analytics. Your language choice is saved on your own device. If you email us, we receive your email address and message.</p>
+<h2>Third-party services</h2><p>This site loads fonts from Google Fonts and 3D code from a public code host. Those providers can see your IP address when your browser requests those files.</p>
+<h2>Links to other sites</h2><p>Tool links lead to other websites with their own privacy practices.</p>
+<h2>Your choices</h2><p>You can clear saved settings by clearing this site's data in your browser. To ask about your email data, contact us.</p></div></div>
+</main>
+<footer><span>&copy; <span id="yr">2026</span> Njira</span><a href="#/terms" data-t="ft">Terms and Conditions</a><a href="#/privacy" data-t="fp">Privacy Policy</a><a id="mail" href="#">Contact</a></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(()=>{
+const CFG={logo:'',showName:true,email:'hello@example.com'}; // logo: set to your logo URL or data URI
+const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MARK='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 27C5 8 22 25 27 5" stroke="#f5b83d" stroke-width="3.6" fill="none" stroke-linecap="round"/><circle cx="27" cy="5" r="2.4" fill="#7fb069"/></svg>';
+$('#brand').innerHTML=(CFG.logo?'<img src="'+CFG.logo+'" alt="">':MARK)+(CFG.showName?'<span>Njira</span>':'');
+$('#mail').href='mailto:'+CFG.email;$('#yr').textContent=new Date().getFullYear();
+// Chichewa strings: have a native speaker review before launch
+const NY={n1:'Tsamba lalikulu',n2:'Zida',n3:'Mitengo',cta:'Onani zida',enter:'Lowani',skipi:'Dumphani chiyambi',sc:'Pitani pansi',
+h0:'Njira yanu yopita ku zida zabwino zopangira.',s0:'Zida za AI zaulere komanso zotsika mtengo za anthu opanga zinthu ku Malawi, pamalo amodzi.',
+h1:'Sinthani mavidiyo mofulumira.',h2:'Pangani ndi kukonza zithunzi.',h3:'Konzani mawu ndi nyimbo.',h4:'Lembani script, pangani positi.',
+b1:'Onani zida za vidiyo',b2:'Onani zida za zithunzi',b3:'Onani zida za mawu',b4:'Onani zida zolembera',b5:'Zida zonse',ft:'Malamulo',fp:'Zinsinsi'};
+$$('[data-t]').forEach(e=>e.dataset.en=e.textContent);
+function setLang(l){document.documentElement.lang=l;$$('[data-t]').forEach(e=>e.textContent=(l==='ny'&&NY[e.dataset.t])||e.dataset.en);$$('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===l));try{localStorage.setItem('njl',l)}catch(e){}}
+$$('.lang button').forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+try{const s=localStorage.getItem('njl');if(s==='ny')setLang('ny')}catch(e){}
+// Tools data: name, category, free?, platforms, description, url. Edit here.
+const L={video:'Video',image:'Images',audio:'Audio',words:'Writing'};
+const TOOLS=[
+['CapCut','video','Free + paid','phone,pc,web','Editor with auto captions and templates.','https://www.capcut.com'],
+['DaVinci Resolve','video','Free + paid','pc','Professional editing and colour grading. The free version is capable.','https://www.blackmagicdesign.com/products/davinciresolve'],
+['Kdenlive','video','Free','pc','Open source video editor.','https://kdenlive.org'],
+['Canva','image','Free + paid','phone,pc,web','Posters, thumbnails and social graphics.','https://www.canva.com'],
+['Photopea','image','Free','web','Photoshop-style editor that runs in the browser.','https://www.photopea.com'],
+['Krita','image','Free','pc','Digital painting and illustration.','https://krita.org'],
+['GIMP','image','Free','pc','Photo retouching and image editing.','https://www.gimp.org'],
+['Audacity','audio','Free','pc','Record audio and remove noise.','https://www.audacityteam.org'],
+['ElevenLabs','audio','Free + paid','web','AI voiceovers from text.','https://elevenlabs.io'],
+['ChatGPT','words','Free + paid','phone,pc,web','Draft scripts, captions and replies.','https://chatgpt.com'],
+['Claude','words','Free + paid','phone,pc,web','Draft and edit scripts, captions and proposals.','https://claude.ai']];
+let cat='all',fo=false,ph=false;
+function chips(){const f=$('#filters');f.innerHTML='';const add=(t,on,fn)=>{const b=document.createElement('button');b.className='chip';b.textContent=t;b.setAttribute('aria-pressed',on);b.onclick=fn;f.append(b)};
+add('All',cat==='all',()=>{cat='all';tools()});Object.keys(L).forEach(k=>add(L[k],cat===k,()=>{cat=k;tools()}));
+add('Free only',fo,()=>{fo=!fo;tools()});add('Works on phone',ph,()=>{ph=!ph;tools()})}
+function tools(){chips();const r=TOOLS.filter(t=>(cat==='all'||t[1]===cat)&&(!fo||t[2]==='Free'||t[2].startsWith('Free'))&&(!ph||t[3].includes('phone')));
+$('#grid').innerHTML=r.length?r.map(t=>'<article class="card"><h3>'+t[0]+'</h3><p>'+t[4]+'</p><div class="tags"><span class="'+(t[2]==='Free'?'free':'')+'">'+t[2]+'</span>'+t[3].split(',').map(p=>'<span>'+{phone:'Phone',pc:'Computer',web:'Browser'}[p]+'</span>').join('')+'</div><a href="'+t[5]+'" target="_blank" rel="noopener noreferrer">Visit '+t[0]+'</a></article>').join(''):'<p class="empty">No tools match these filters. Turn one off to see more.</p>'}
+// Routing
+const V=['home','tools','pricing','terms','privacy'];
+function route(){const p=location.hash.replace(/^#\/?/,'').split('/');let v=V.includes(p[0])?p[0]:'home';
+V.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));document.body.classList.toggle('home-on',v==='home');
+$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===v));
+if(v==='tools'){cat=L[p[1]]?p[1]:'all';tools()}if(v!=='home')scrollTo(0,0)}
+addEventListener('hashchange',route);
+// Chapters
+const ch=$$('.chap'),pg=$('#prog');
+ch.forEach((c,i)=>{const b=document.createElement('button');b.setAttribute('aria-label',c.dataset.l);b.onclick=()=>c.scrollIntoView({behavior:RM?'auto':'smooth'});pg.append(b)});
+function mark(i){$$('#prog button').forEach((b,j)=>b.classList.toggle('on',i===j));$('#cnt').textContent=(i+1)+' / '+ch.length+'  '+ch[i].dataset.l}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)mark(ch.indexOf(e.target))}),{rootMargin:'-45% 0px -45% 0px'});
+ch.forEach(c=>io.observe(c));mark(0);
+// Loader
+let ready=false,pc=0;const ld=$('#ld');
+function enter(){ld.remove();document.body.classList.remove('lock')}
+if(/^#\/(tools|pricing|terms|privacy)/.test(location.hash)){enter()}else{document.body.classList.add('lock');
+const iv=setInterval(()=>{if(pc<90)pc+=3;else if(ready)pc=100;$('#pc').textContent=pc+'%';if(pc>=100){clearInterval(iv);$('#go').hidden=false}},40)}
+$('#go').onclick=enter;$('#skip').onclick=enter;
+route();
+// 3D scene
+function fb(){document.body.classList.add('fallback')}
+function init(){
+if(typeof THREE==='undefined'||!window.WebGLRenderingContext)return fb();
+let R;try{R=new THREE.WebGLRenderer({canvas:$('#gl'),antialias:true,alpha:true})}catch(e){return fb()}
+R.setPixelRatio(Math.min(devicePixelRatio||1,2));
+const S=new THREE.Scene();S.fog=new THREE.FogExp2(0x061a22,.04);
+const C=new THREE.PerspectiveCamera(55,1,.1,120);
+S.add(new THREE.HemisphereLight(0xcfe8e0,0x061a22,1.5));
+const dl=new THREE.DirectionalLight(0xfff1d0,1.8);dl.position.set(3,5,4);S.add(dl);
+const cv=new THREE.CatmullRomCurve3([[0,0,0],[3,.8,-7],[-3,-.4,-14],[3,.6,-21],[-2.5,0,-28],[0,.4,-35]].map(a=>new THREE.Vector3(a[0],a[1],a[2])));
+const M=(c,e)=>new THREE.MeshStandardMaterial({color:c,roughness:.5,metalness:.1,emissive:c,emissiveIntensity:e||0});
+S.add(new THREE.Mesh(new THREE.TubeGeometry(cv,240,.05,8),M(0xf5b83d,.7)));
+const bx=(w,h,d,c,x,y,z,g)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c));m.position.set(x,y||0,z||0);g.add(m);return m};
+function put(g,t){const p=cv.getPointAt(t);g.position.set(p.x+2.1,p.y+.3,p.z);g.scale.setScalar(1.5);S.add(g);return g}
+// video camera
+const vid=new THREE.Group();bx(1.2,.8,.6,0x2b5560,0,0,0,vid);bx(.4,.18,.4,0xeaf2ee,-.2,.5,0,vid);
+const ln=new THREE.Mesh(new THREE.CylinderGeometry(.32,.26,.4,24),M(0x0c1b20));ln.rotation.x=Math.PI/2;ln.position.set(.15,0,.45);vid.add(ln);
+const gl=new THREE.Mesh(new THREE.CircleGeometry(.22,24),M(0xf5b83d,.9));gl.position.set(.15,0,.66);vid.add(gl);put(vid,.315);
+// picture frame
+const img=new THREE.Group();bx(1.8,1.3,.08,0xeaf2ee,0,0,0,img);bx(1.6,1.1,.1,0x1f6f7a,0,0,.01,img);
+const sun=new THREE.Mesh(new THREE.CircleGeometry(.2,24),M(0xf5b83d,.8));sun.position.set(.4,.25,.07);img.add(sun);
+const hill=new THREE.Mesh(new THREE.ConeGeometry(.6,.6,4),M(0x7fb069,.2));hill.position.set(-.3,-.25,.07);hill.rotation.y=Math.PI/4;hill.scale.z=.1;img.add(hill);put(img,.54);
+// sound wave
+const aud=new THREE.Group(),bars=[];for(let i=0;i<15;i++){const h=.5+Math.abs(Math.sin(i*.7))*.8;bars.push(bx(.1,h,.1,i%3?0x7fb069:0xf5b83d,(i-7)*.18,0,0,aud))}put(aud,.765);
+// text lines and cursor
+const txt=new THREE.Group();[1.6,1.3,1.5,.9].forEach((w,i)=>bx(w,.1,.06,0xeaf2ee,-(1.6-w)/2,.4-i*.3,0,txt));
+const cur=bx(.07,.26,.06,0xf5b83d,.0,-.8,0,txt);cur.position.x=.15;put(txt,.985);
+const N=300,pa=new Float32Array(N*3);for(let i=0;i<N;i++){pa[i*3]=(Math.random()-.5)*18;pa[i*3+1]=(Math.random()-.5)*9;pa[i*3+2]=-Math.random()*40}
+const pg2=new THREE.BufferGeometry();pg2.setAttribute('position',new THREE.BufferAttribute(pa,3));
+S.add(new THREE.Points(pg2,new THREE.PointsMaterial({size:.06,color:0xeaf2ee,transparent:true,opacity:.5})));
+const pr={x:0,y:0,tx:0,ty:0};addEventListener('pointermove',e=>{pr.tx=e.clientX/innerWidth-.5;pr.ty=e.clientY/innerHeight-.5},{passive:true});
+function size(){R.setSize(innerWidth,innerHeight,false);C.aspect=innerWidth/innerHeight;C.fov=innerWidth<700?72:55;C.updateProjectionMatrix()}
+size();addEventListener('resize',size);
+let tp=0;
+function frame(ms){requestAnimationFrame(frame);if(!document.body.classList.contains('home-on')||document.hidden)return;
+const h=$('#v-home'),mx=h.offsetHeight-innerHeight,tt=mx>0?Math.min(1,Math.max(0,scrollY/mx)):0,s=ms/1000;
+tp+=(tt-tp)*(RM?1:.07);pr.x+=(pr.tx-pr.x)*.05;pr.y+=(pr.ty-pr.y)*.05;
+const t=.02+tp*.9,p=cv.getPointAt(t),q=cv.getPointAt(Math.min(1,t+.05));
+C.position.set(p.x+pr.x*.9,p.y+.3-pr.y*.6,p.z+1.5);C.lookAt(q.x,q.y+.1,q.z);
+if(!RM){vid.rotation.y=Math.sin(s*.6)*.5;img.rotation.y=Math.sin(s*.5+1)*.35;txt.rotation.y=Math.sin(s*.5+2)*.3;bars.forEach((b,i)=>b.scale.y=.6+.4*Math.abs(Math.sin(s*2+i*.6)));cur.visible=Math.floor(s*2)%2===0}
+R.render(S,C)}
+requestAnimationFrame(frame);ready=true}
+try{init()}catch(e){fb()}ready=true;
+})();
+</script>
+</body></html>
