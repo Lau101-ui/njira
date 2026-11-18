@@ -1,37 +1,46 @@
-# NJIRA — Creative paths, in motion
+# NJIRA — Creative ecosystem
 
-NJIRA is a creative ecosystem concept connecting creators, clients, creative services, digital and physical products, tools, learning, and collaboration.
+NJIRA connects creators, clients, creative services, digital and physical products, creative tools, learning, and collaboration. The initial experience is designed Malawi-first, with room to expand internationally.
 
 ## Current stage
 
-This repository is the design-prototype stage. It is not yet the production marketplace.
+This repository contains a **frontend design prototype**, not a production marketplace.
 
-The current visual direction uses:
+### Main entry point
+
+Open `index.html` in a modern browser. It is the current unified experience and combines:
+- The chapter-led scroll journey and progress rail from the original `102.html`.
+- The newer visual direction and interactive Three.js creative path.
+- Discovery, marketplace categories, creative tools, learning, and project-workflow storytelling.
+- Selected stock-photo references to demonstrate the intended visual treatment.
+
+### Reference prototypes
+
+- `102.html` — original NJIRA creative-tools directory, retained as a reference for its scroll chapters, path navigation, language switcher, and tool filters.
+- `njira-interaction-demo-3d.html` — earlier 3D visual direction prototype.
+
+## Visual system
+
 - Deep aubergine ink: `#17151D`
 - Warm parchment: `#F3EFE6`
 - Mineral periwinkle: `#A9B7FF`
 - Ember coral: `#FF715B`
 - Muted jade: `#B5CFC7`
 
-## Design principles
+## Important prototype limitations
 
-- A persistent creative-path motif connects the major sections.
-- 3D interactions should communicate creative disciplines, not act as decoration.
-- Use selected real stock photography as temporary visual references; replace these with creator-owned portfolio media when the marketplace is populated.
-- Keep the experience responsive, accessible, and usable when motion or WebGL is unavailable.
-- Preserve clear routes to discovery, tools, learning, services, products, and collaboration.
+The marketplace cards and creator examples are illustrative, not live listings. Stock photography is used as temporary art direction and must be replaced or supplemented with properly licensed creator-owned media before launch. Tool listings and pricing should be verified before publication.
 
-## Prototype scope
-
-The interactive demo is a frontend concept only. Authentication, database, messaging, project workflows, checkout, PayChangu payments, seller dashboards, and production security are not implemented here.
+Authentication, database, messaging, project briefs, proposals, milestones, file storage, checkout, PayChangu payment processing, seller payouts, subscriptions, admin controls, and production security are **not implemented** in this frontend prototype. The early-access button only explains this limitation; it does not collect user data.
 
 ## Running
 
-Open the standalone HTML prototype in a modern browser. An internet connection may be required for external fonts, photography, and the 3D library.
+Open `index.html` in a modern browser. An internet connection is needed for Google Fonts, the external Three.js library, and the remote stock-image references. If WebGL is unavailable, the rest of the page should remain usable without the 3D scene.
 
-## Next engineering phase
+## Next engineering steps
 
-1. Review and browser-test the prototype on desktop and mobile.
-2. Refine 3D performance, reduced-motion behavior, keyboard accessibility, and fallbacks.
-3. Convert the approved experience into a maintainable application structure.
-4. Implement and test the production backend and marketplace workflows independently of the visual prototype.
+1. Browser-test desktop and mobile layouts, navigation, filters, scroll behavior, and the 3D interaction.
+2. Improve reduced-motion and low-performance-device behavior; verify keyboard accessibility.
+3. Replace the static sample content with real marketplace data.
+4. Convert the approved frontend into a maintainable application structure.
+5. Build and test authentication, database, storage, messaging, marketplace workflows, and payment integration separately.
