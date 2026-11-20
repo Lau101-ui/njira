@@ -8,7 +8,7 @@ export default function HomePage() {
     <header className="topbar">
       <a className="wordmark" href="/" aria-label="NJIRA home">NJIRA<span>®</span></a>
       <span className="topbar-note">A creative ecosystem / Malawi → Everywhere</span>
-      <a className="prototype-link" href="/index.html">View design prototype <span aria-hidden="true">↗</span></a>
+      <a className="prototype-link" href="/prototype.html">View design prototype <span aria-hidden="true">↗</span></a>
     </header>
     <section className="hero">
       <div className="hero-copy">
