@@ -13,6 +13,84 @@ enum UserStatus {
   DELETED
 }
 
+enum StaffRole {
+  PLATFORM_ADMIN
+  SUPPLIER_OPERATIONS
+  COMPLIANCE_REVIEWER
+  PRIVACY_OFFICER
+  FINANCE_REVIEWER
+}
+
+enum LegalDocumentType {
+  TERMS_OF_SERVICE
+  PRIVACY_NOTICE
+  COOKIE_NOTICE
+  CREATOR_AGREEMENT
+  CLIENT_AGREEMENT
+  SUPPLIER_AGREEMENT
+  DIGITAL_CONTENT_CONSENT
+}
+
+enum LegalDocumentStatus {
+  DRAFT
+  PUBLISHED
+  RETIRED
+}
+
+enum ConsentPurpose {
+  MARKETING_EMAIL
+  MARKETING_SMS
+  ANALYTICS
+  PERSONALIZATION
+  NON_ESSENTIAL_COOKIES
+}
+
+enum ConsentAction {
+  GRANTED
+  WITHDRAWN
+}
+
+enum DataSubjectRequestType {
+  ACCESS
+  RECTIFICATION
+  ERASURE
+  PORTABILITY
+  RESTRICTION
+  OBJECTION
+  WITHDRAW_CONSENT
+  COMPLAINT
+}
+
+enum DataSubjectRequestStatus {
+  RECEIVED
+  IDENTITY_CHECK
+  IN_PROGRESS
+  ON_HOLD_LEGAL_RETENTION
+  COMPLETED
+  REJECTED_WITH_REASON
+}
+
+enum ComplianceIncidentSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ComplianceIncidentStatus {
+  OPEN
+  INVESTIGATING
+  CONTAINED
+  REPORTED
+  CLOSED
+}
+
+enum JurisdictionApprovalStatus {
+  PENDING
+  APPROVED
+  BLOCKED
+}
+
 enum ListingType {
   SERVICE
   DIGITAL_PRODUCT
@@ -53,9 +131,80 @@ enum PaymentProvider {
 enum PaymentPurpose {
   ORDER_CHECKOUT
   PROPOSAL_APPLICATION_FEE
+  DIGITAL_TOOL_PURCHASE
+}
+
+enum SupplierStatus {
+  PENDING_REVIEW
+  ACTIVE
+  PAUSED
+  SUSPENDED
+}
+
+enum SupplierApplicationStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  NEEDS_INFORMATION
+  APPROVED
+  REJECTED
+  WITHDRAWN
+}
+
+enum SupplierReviewDecision {
+  OPENED
+  INFORMATION_REQUESTED
+  INFORMATION_RECEIVED
+  APPROVED
+  REJECTED
+  WITHDRAWN
+  REOPENED
+}
+
+enum DigitalToolStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum ToolBillingInterval {
+  ONE_TIME
+  MONTHLY
+  ANNUAL
+  USAGE_BASED
+}
+
+enum DigitalServiceOrderStatus {
+  PENDING_PAYMENT
+  PAID
+  FULFILLMENT_PENDING
+  FULFILLING
+  FULFILLED
+  FAILED
+  CANCELLED
+  REFUND_PENDING
+  REFUNDED
+  DISPUTED
+}
+
+enum FulfillmentStatus {
+  QUEUED
+  IN_PROGRESS
+  DELIVERED
+  FAILED
+  REVOKED
+}
+
+enum FulfillmentMethod {
+  AUTHORIZED_RESELLER
+  REDEMPTION_CODE
+  DIRECT_VENDOR_CHECKOUT_ASSIST
+  MANUAL_APPROVED
 }
 
 enum BriefStatus {
+  DRAFT
   OPEN
   REVIEWING
   AWARDED
@@ -104,13 +253,19 @@ enum LedgerEntryType {
   PAYOUT
   PLATFORM_APPLICATION_FEE
   ADJUSTMENT
+  DIGITAL_TOOL_SALE
+  SUPPLIER_COST
 }
 
 model User {
   id                String       @id @default(cuid())
-  authProvider      String
-  authSubject       String
+  authProvider      String?
+  authSubject       String?
+  name              String       @default("")
   email             String       @unique
+  emailVerified     Boolean      @default(false)
+  image             String?
+  twoFactorEnabled  Boolean      @default(false)
   status            UserStatus   @default(ACTIVE)
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
@@ -124,9 +279,80 @@ model User {
   reviewsWritten    Review[]     @relation("ReviewAuthor")
   reviewsReceived   Review[]     @relation("ReviewTarget")
   conversationMemberships ConversationParticipant[]
+  digitalServiceOrders DigitalServiceOrder[]
+  supplierApplications SupplierApplication[]
+  legalAcceptances   LegalAcceptance[]
+  privacyRequests    DataSubjectRequest[] @relation("PrivacyRequestSubject")
+  consentEvents      ConsentEvent[]
+  staffRoleAssignments StaffRoleAssignment[]
+  sessions          Session[]
+  accounts          Account[]
+  twoFactor         TwoFactor?
 
   @@unique([authProvider, authSubject])
   @@index([status, createdAt])
+}
+
+
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model TwoFactor {
+  id                      String   @id
+  secret                  String
+  backupCodes             String
+  verified                Boolean  @default(false)
+  failedVerificationCount Int      @default(0)
+  lockedUntil             DateTime?
+  userId                  String   @unique
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("twoFactor")
 }
 
 model ClientProfile {
@@ -260,8 +486,19 @@ model Order {
   status          OrderStatus @default(PENDING_PAYMENT)
   currency        String
   subtotal        Decimal     @db.Decimal(14, 2)
+  /// Immutable fee amount charged for this order, calculated at order creation.
   platformFee     Decimal     @default(0) @db.Decimal(14, 2)
+  /// Immutable commission rate snapshot as a fraction (for example, 0.08 = 8%).
+  /// Application code must set this explicitly for new paid orders; zero remains safe for legacy/free orders.
+  platformFeeRate Decimal     @default(0) @db.Decimal(7, 6)
+  /// Actual provider fee once confirmed from provider settlement/reconciliation.
   providerFee     Decimal?    @db.Decimal(14, 2)
+  /// Immutable legal disclosure snapshots for the transaction.
+  sellerOfRecordName String?
+  sellerOfRecordCountryCode String?
+  sellerRole      String?
+  termsVersion    String?
+  privacyNoticeVersion String?
   total           Decimal     @db.Decimal(14, 2)
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -311,7 +548,10 @@ model Milestone {
 
 model Payment {
   id                String          @id @default(cuid())
-  orderId           String
+  orderId           String?
+  proposalId        String?
+  digitalServiceOrderId String?
+  purpose           PaymentPurpose @default(ORDER_CHECKOUT)
   provider          PaymentProvider @default(PAYCHANGU)
   status            PaymentStatus   @default(PENDING)
   txRef             String          @unique
@@ -326,10 +566,12 @@ model Payment {
   updatedAt         DateTime        @updatedAt
   order             Order?          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   proposal          Proposal?       @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  digitalServiceOrder DigitalServiceOrder? @relation(fields: [digitalServiceOrderId], references: [id], onDelete: Cascade)
   webhookEvents     WebhookEvent[]
 
   @@index([orderId, status])
   @@index([proposalId, status])
+  @@index([digitalServiceOrderId, status])
   @@index([status, createdAt])
   @@unique([provider, providerReference])
 }
@@ -356,6 +598,7 @@ model LedgerEntry {
   id          String          @id @default(cuid())
   orderId     String?
   proposalId  String?
+  digitalServiceOrderId String?
   type        LedgerEntryType
   amount      Decimal         @db.Decimal(14, 2)
   currency    String
@@ -364,10 +607,12 @@ model LedgerEntry {
   createdAt   DateTime        @default(now())
   order       Order?          @relation(fields: [orderId], references: [id])
   proposal    Proposal?       @relation(fields: [proposalId], references: [id])
+  digitalServiceOrder DigitalServiceOrder? @relation(fields: [digitalServiceOrderId], references: [id])
 
   @@unique([type, reference])
   @@index([orderId, createdAt])
   @@index([proposalId, createdAt])
+  @@index([digitalServiceOrderId, createdAt])
 }
 
 model CreatorPaymentAccount {
@@ -448,4 +693,367 @@ model Review {
   creator     CreatorProfile @relation("CreatorReviews", fields: [creatorId], references: [id])
   @@unique([authorId, orderId])
   @@index([creatorId, createdAt])
+}
+
+
+/// A supplier's application to supply products/services through NJIRA.
+/// Evidence itself lives in a restricted encrypted document store; only references and
+/// review metadata belong here. Approval is a human compliance/operations decision.
+model SupplierApplication {
+  id                       String                    @id @default(cuid())
+  applicationNumber        String                    @unique
+  applicantUserId          String?
+  supplierId               String?
+  status                   SupplierApplicationStatus @default(DRAFT)
+  legalBusinessName        String
+  tradingName              String?
+  countryCode              String
+  registrationNumber       String?
+  taxIdentifierReference   String?
+  businessAddress          String                    @db.Text
+  websiteUrl               String?
+  contactName              String
+  contactEmail             String
+  contactPhone             String?
+  productCategories        String[]
+  brandsOrProducts         String[]                  @default([])
+  supplySourceDescription  String                    @db.Text
+  authorisationType        String?
+  authorisationEvidenceRef String?
+  registrationEvidenceRef  String?
+  ownershipEvidenceRef     String?
+  proposedFulfillment      String                    @db.Text
+  regionalRestrictions     String?                   @db.Text
+  settlementCurrencies     String[]
+  refundAndSupportProcess  String                    @db.Text
+  agreementEvidenceRef     String?
+  applicantDeclarationAt   DateTime?
+  submittedAt              DateTime?
+  reviewedAt               DateTime?
+  decidedAt                DateTime?
+  decisionReasonCode       String?
+  internalNotes            String?                   @db.Text
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  applicant                User?                     @relation(fields: [applicantUserId], references: [id], onDelete: SetNull)
+  supplier                 DigitalToolSupplier?      @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  reviewEvents             SupplierApplicationReviewEvent[]
+
+  @@index([status, submittedAt])
+  @@index([applicantUserId, createdAt])
+  @@index([countryCode, status])
+  @@index([supplierId, status])
+}
+
+/// Append-only decision trail. Admin identity is stored as an opaque auth subject until
+/// the application has a concrete staff/role model; API access must be admin-only.
+model SupplierApplicationReviewEvent {
+  id              String                   @id @default(cuid())
+  applicationId   String
+  reviewerSubject String
+  decision        SupplierReviewDecision
+  reasonCode      String?
+  note            String?                  @db.Text
+  evidenceRef     String?
+  createdAt       DateTime                 @default(now())
+  application     SupplierApplication     @relation(fields: [applicationId], references: [id], onDelete: Restrict)
+
+  @@index([applicationId, createdAt])
+  @@index([reviewerSubject, createdAt])
+}
+
+/// External digital products and services that NJIRA is authorised and operationally able to fulfil.
+model DigitalToolSupplier {
+  id                  String         @id @default(cuid())
+  name                String
+  slug                String         @unique
+  status              SupplierStatus @default(PENDING_REVIEW)
+  websiteUrl          String?
+  supportEmail        String?
+  agreementReference  String?
+  credentialVaultRef  String?
+  settlementCurrency  String?
+  notes               String?        @db.Text
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  tools               DigitalTool[]
+  orders              DigitalServiceOrder[]
+  applications        SupplierApplication[]
+
+  @@index([status, name])
+}
+
+/// A catalogue entry; publication requires an approved supplier or fulfilment route.
+model DigitalTool {
+  id                    String            @id @default(cuid())
+  supplierId            String?
+  slug                  String            @unique
+  name                  String
+  vendorName            String
+  category              String
+  shortDescription      String
+  description           String            @db.Text
+  status                DigitalToolStatus @default(DRAFT)
+  officialProductUrl    String?
+  officialTermsUrl      String?
+  supportUrl            String?
+  supportedCountries    String[]          @default(["MW"])
+  regionNotes           String?           @db.Text
+  requiresCustomerEmail Boolean           @default(true)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  supplier              DigitalToolSupplier? @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  plans                 DigitalToolPlan[]
+
+  @@index([status, category])
+  @@index([supplierId, status])
+}
+
+/// A specific SKU/term. Price and currency are authoritative server-side values.
+model DigitalToolPlan {
+  id                    String             @id @default(cuid())
+  toolId                String
+  code                  String
+  name                  String
+  description           String?
+  billingInterval       ToolBillingInterval
+  termDays              Int?
+  currency              String
+  price                 Decimal            @db.Decimal(14, 2)
+  supplierCost          Decimal?           @db.Decimal(14, 2)
+  supplierCostCurrency  String?
+  fulfillmentMethod     FulfillmentMethod
+  externalProductRef    String?
+  isActive              Boolean            @default(false)
+  requiresRenewalNotice Boolean            @default(false)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  tool                  DigitalTool        @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  orders                DigitalServiceOrder[]
+
+  @@unique([toolId, code])
+  @@index([toolId, isActive])
+}
+
+/// Customer purchase snapshot, separate from creator-service Orders.
+model DigitalServiceOrder {
+  id                    String                    @id @default(cuid())
+  orderNumber           String                    @unique
+  buyerId               String
+  toolPlanId            String
+  supplierId            String?
+  status                DigitalServiceOrderStatus @default(PENDING_PAYMENT)
+  currency              String
+  unitPrice             Decimal                   @db.Decimal(14, 2)
+  quantity              Int                       @default(1)
+  total                 Decimal                   @db.Decimal(14, 2)
+  supplierCost          Decimal?                  @db.Decimal(14, 2)
+  supplierCostCurrency  String?
+  customerEmail         String?
+  customerAccountRef    String?
+  idempotencyKey        String                    @unique
+  supplierOrderRef      String?
+  /// Immutable legal-role snapshot: identify who actually sells/supplies this SKU.
+  sellerOfRecordName    String?
+  sellerOfRecordCountryCode String?
+  sellerRole            String?
+  termsVersion          String?
+  privacyNoticeVersion  String?
+  /// Record only where the user expressly requests/consents to early digital delivery.
+  digitalContentConsentAt DateTime?
+  digitalContentConsentVersion String?
+  paidAt                DateTime?
+  fulfilledAt           DateTime?
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  buyer                 User                      @relation(fields: [buyerId], references: [id])
+  plan                  DigitalToolPlan           @relation(fields: [toolPlanId], references: [id])
+  supplier              DigitalToolSupplier?      @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  payments              Payment[]
+  ledgerEntries         LedgerEntry[]
+  fulfillments          DigitalServiceFulfillment[]
+
+  @@index([buyerId, createdAt])
+  @@index([status, createdAt])
+  @@index([supplierId, status])
+  @@unique([supplierId, supplierOrderRef])
+}
+
+/// Delivery audit trail. Never store passwords, card details or reusable account credentials.
+model DigitalServiceFulfillment {
+  id                    String              @id @default(cuid())
+  orderId               String
+  status                FulfillmentStatus   @default(QUEUED)
+  method                FulfillmentMethod
+  supplierReference     String?
+  secureDeliveryRef     String?
+  customerInstructions  String?             @db.Text
+  failureCode           String?
+  failureDetails        String?             @db.Text
+  deliveredAt           DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  order                 DigitalServiceOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, createdAt])
+  @@index([status, createdAt])
+}
+
+
+
+/// Immutable, versioned legal notice or agreement published by NJIRA.
+model LegalDocumentVersion {
+  id             String             @id @default(cuid())
+  type           LegalDocumentType
+  version        String
+  locale         String             @default("en")
+  status         LegalDocumentStatus @default(DRAFT)
+  title          String
+  documentUrl    String
+  contentSha256  String
+  effectiveAt    DateTime?
+  publishedAt    DateTime?
+  retiredAt      DateTime?
+  createdAt      DateTime           @default(now())
+  acceptances    LegalAcceptance[]
+
+  @@unique([type, version, locale])
+  @@index([type, status, effectiveAt])
+}
+
+/// Append-only record that a user accepted a specific published document version.
+/// Store only a minimised IP hash if legally justified; never store raw IP here.
+model LegalAcceptance {
+  id                String   @id @default(cuid())
+  userId            String?
+  documentVersionId String
+  acceptedAt        DateTime @default(now())
+  context           String
+  transactionRef    String?
+  ipAddressHash     String?
+  userAgentSummary  String?
+  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  documentVersion  LegalDocumentVersion @relation(fields: [documentVersionId], references: [id], onDelete: Restrict)
+
+  @@index([userId, acceptedAt])
+  @@index([documentVersionId, acceptedAt])
+  @@index([transactionRef])
+}
+
+/// Data-subject request workflow. Keep identity evidence outside this table in an
+/// encrypted case store; subjectReferenceHash is a keyed, non-reversible reference.
+model DataSubjectRequest {
+  id                    String                    @id @default(cuid())
+  userId                String?
+  subjectReferenceHash  String
+  type                  DataSubjectRequestType
+  status                DataSubjectRequestStatus  @default(RECEIVED)
+  receivedAt            DateTime                  @default(now())
+  targetResponseAt      DateTime?
+  identityVerifiedAt    DateTime?
+  completedAt            DateTime?
+  outcomeCode           String?
+  secureCaseReference   String?
+  legalHoldReasonCode   String?
+  assignedTo            String?
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  user                  User?                     @relation("PrivacyRequestSubject", fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([status, receivedAt])
+  @@index([subjectReferenceHash, receivedAt])
+}
+
+/// Security/privacy incident register. Do not put credentials or unnecessary personal
+/// data in summaries; keep evidence in a restricted incident vault.
+model ComplianceIncident {
+  id                       String                     @id @default(cuid())
+  incidentReference        String                     @unique
+  severity                 ComplianceIncidentSeverity
+  status                   ComplianceIncidentStatus   @default(OPEN)
+  detectedAt               DateTime
+  awarenessAt              DateTime?
+  containedAt              DateTime?
+  authorityNotifiedAt      DateTime?
+  affectedSubjectsNotifiedAt DateTime?
+  closedAt                 DateTime?
+  summary                  String                     @db.Text
+  reportabilityDecision    String?
+  secureEvidenceReference  String?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+
+  @@index([status, severity, detectedAt])
+}
+
+/// Feature/country release gate. A missing or non-approved record must fail closed.
+model JurisdictionFeatureApproval {
+  id                 String                       @id @default(cuid())
+  countryCode        String
+  featureKey         String
+  status             JurisdictionApprovalStatus   @default(PENDING)
+  legalReviewRef     String?
+  approvedBy         String?
+  approvedAt         DateTime?
+  reviewDueAt        DateTime?
+  notes              String?                      @db.Text
+  createdAt          DateTime                     @default(now())
+  updatedAt          DateTime                     @updatedAt
+
+  @@unique([countryCode, featureKey])
+  @@index([countryCode, status])
+}
+
+
+/// Append-only, granular consent history. Contract performance must never depend
+/// on optional marketing, analytics or personalization consent.
+model ConsentEvent {
+  id                 String         @id @default(cuid())
+  userId             String?
+  purpose            ConsentPurpose
+  action             ConsentAction
+  noticeVersion      String
+  occurredAt         DateTime       @default(now())
+  collectionSource   String
+  evidenceReference  String?
+  user               User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, purpose, occurredAt])
+  @@index([purpose, occurredAt])
+}
+
+
+/// Explicit, time-bounded staff permissions. No role is granted by default.
+/// Assignment writes must be restricted to a separately controlled provisioning process.
+model StaffRoleAssignment {
+  id                 String    @id @default(cuid())
+  userId             String
+  role               StaffRole
+  grantedBySubject   String
+  grantReason        String
+  grantedAt          DateTime  @default(now())
+  expiresAt          DateTime?
+  revokedAt          DateTime?
+  revokedBySubject   String?
+  revocationReason   String?
+  user               User      @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, role])
+  @@index([role, revokedAt, expiresAt])
+}
+
+/// Append-only audit trail for privileged role changes; never treat this as a substitute
+/// for database-level access controls or independent security logging.
+model StaffRoleAuditEvent {
+  id                 String    @id @default(cuid())
+  targetUserId       String
+  role               StaffRole
+  action             String
+  actorSubject       String
+  reason             String
+  assignmentId       String?
+  occurredAt         DateTime  @default(now())
+
+  @@index([targetUserId, occurredAt])
+  @@index([actorSubject, occurredAt])
 }

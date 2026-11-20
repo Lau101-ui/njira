@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102326">
+<meta name="description" content="NJIRA connects Malawi's creative community to clients, services, products, tools and learning.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NJIRA — Find your next creative path">
+<meta property="og:description" content="Discover creative talent, services, products, tools and learning in one connected ecosystem.">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M4 27C5 8 19 26 27 5%27 fill=%27none%27 stroke=%27%23A9B7FF%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3Ccircle cx=%2727%27 cy=%275%27 r=%272.5%27 fill=%27%23FF715B%27/%3E%3C/svg%3E">
+<title>NJIRA — Find your next creative path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#102326;--paper:#F2F0E8;--cream:#E5E1D5;--peri:#A8C4B7;--coral:#F07855;--jade:#B5C6A2;--muted:#A9B3AD;--line:rgba(242,240,232,.17);--display:'Bricolage Grotesque',sans-serif;--body:'Manrope',sans-serif;--mono:'DM Mono',monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:85px}body{margin:0;background:var(--ink);color:var(--paper);font:16px/1.6 var(--body);letter-spacing:-.012em;overflow-x:hidden}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--peri);outline-offset:4px}::selection{background:var(--peri);color:var(--ink)}
+.skip-link{position:fixed;left:16px;top:-60px;z-index:200;padding:10px 14px;background:var(--peri);color:var(--ink);font-weight:700}.skip-link:focus{top:12px}
+.top{height:76px;position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:rgba(23,21,29,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:800 1.55rem var(--display);letter-spacing:-.075em;font-variation-settings:'opsz' 24}.brand svg{width:27px;height:27px}.brand small{font:9px var(--mono);letter-spacing:.12em;color:var(--peri);margin-left:3px}
+.nav{display:flex;gap:25px;align-items:center;font-size:.85rem;color:#c9c4ce}.nav a:hover{color:var(--peri)}.top-actions{display:flex;align-items:center;gap:16px}.quiet{font-size:.85rem;color:#d4ced8}.menu{display:none;background:none;border:0;color:var(--paper);font-size:1.5rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:13px;padding:13px 18px;background:var(--peri);color:var(--ink);font-weight:700;font-size:.87rem;border:1px solid var(--peri);transition:.2s}.btn:hover{transform:translateY(-3px);background:#d3daff}.btn.dark{background:transparent;color:var(--paper);border-color:#817b89}.btn.dark:hover{border-color:var(--peri);color:var(--peri)}.btn.coral{background:var(--coral);border-color:var(--coral)}
+.eyebrow{font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--peri);display:flex;align-items:center;gap:10px}.eyebrow:before{content:"";width:24px;height:1px;background:currentColor}
+.hero{min-height:850px;padding:145px 7vw 85px;display:grid;grid-template-columns:1fr 1fr;gap:3vw;align-items:center;position:relative;overflow:hidden;isolation:isolate}.hero:before{content:"";position:absolute;width:65vw;height:65vw;border:1px solid #a8c4b71c;border-radius:50%;right:-15vw;top:0;box-shadow:0 0 0 8vw #a8c4b708,0 0 0 17vw #a8c4b705;z-index:-1}
+.hero h1{font:700 clamp(4.2rem,8.4vw,8.4rem)/.84 var(--display);letter-spacing:-.075em;font-variation-settings:'opsz' 72;margin:27px 0}.hero h1 em{font-style:normal;color:var(--peri)}.hero-copy{max-width:450px;color:#c1bbc6;font-size:1.02rem}.hero-actions{display:flex;gap:22px;align-items:center;margin-top:28px;flex-wrap:wrap}.underlink{border-bottom:1px solid #9e98a4;padding:9px 0;font-weight:600;font-size:.88rem}
+.hero-meta{display:flex;gap:32px;margin-top:55px;color:#99929f;font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase}.hero-meta strong{display:block;color:var(--paper);font:600 1.05rem var(--display);letter-spacing:0;margin-bottom:3px}
+.hero-visual{height:570px;position:relative;perspective:1000px}.visual-grid{position:absolute;inset:8%;background-image:linear-gradient(#a8c4b716 1px,transparent 1px),linear-gradient(90deg,#a8c4b716 1px,transparent 1px);background-size:34px 34px;transform:rotate(-13deg);mask-image:radial-gradient(ellipse,black 15%,transparent 72%)}
+#journey3d{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none}
+main,footer{position:relative;z-index:2}
+#journeyProgress{position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:35;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+#journeyProgress button{width:24px;height:5px;background:#a8c4b745;border:0;padding:0;cursor:pointer;transition:width .25s ease,background .25s ease}
+#journeyProgress button[aria-current="step"]{width:46px;background:var(--coral)}
+#journeyCount{position:fixed;right:24px;bottom:22px;z-index:35;color:#aaa5b0;font:10px var(--mono);letter-spacing:.1em;text-shadow:0 1px 8px #17151d}
+#journeyCount b{color:var(--peri);font-weight:400}
+.discover{background:rgba(242,240,232,.91)}
+.path-break{background:rgba(168,196,183,.91)}
+.market{background:rgba(16,35,38,.91)}
+.tool-area{background:rgba(229,225,213,.91)}
+@media(max-width:700px){#journeyProgress{right:12px;gap:8px}#journeyProgress button{width:16px}#journeyProgress button[aria-current="step"]{width:30px}#journeyCount{right:12px;bottom:12px;font-size:9px}}
+.section{padding:115px 8vw;position:relative}.section-head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:48px}.kicker{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--coral)}h2{font:650 clamp(2.8rem,5.5vw,5.7rem)/.94 var(--display);letter-spacing:-.065em;font-variation-settings:'opsz' 48;margin:15px 0 0;max-width:780px}h2 em{font-style:normal;color:var(--peri)}.intro{max-width:350px;color:#bcb5c1;font-size:.92rem;line-height:1.7}
+.discover{background:rgba(242,240,232,.91);backdrop-filter:blur(10px);color:var(--ink)}.discover .kicker{color:#B84F37}.discover h2 em{color:#496D70}.discover .intro{color:#696570}
+.grid-work{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.work-card{position:relative;min-height:430px;overflow:hidden;background:#393540;isolation:isolate}.work-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .8s}.work-card:hover img{transform:scale(1.05)}.work-card:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,#09080dcc);z-index:-1}.work-info{position:absolute;bottom:23px;left:24px;right:24px;color:white;display:flex;justify-content:space-between;align-items:end;gap:16px}.work-info h3{font:600 2rem var(--display);letter-spacing:-.05em;margin:7px 0}.work-info p{font-size:.8rem;margin:0;color:#eee}.tag{font:9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--peri)}.arrow{width:42px;height:42px;border:1px solid #ffffff9c;border-radius:50%;display:grid;place-items:center;flex:none}.work-stack{display:grid;gap:18px}.work-stack .work-card{min-height:206px}.work-stack h3{font-size:1.55rem}
+.path-break{background:rgba(168,196,183,.91);backdrop-filter:blur(10px);color:var(--ink);padding:88px 8vw;display:grid;grid-template-columns:.85fr 1.15fr;align-items:center;gap:7vw}.path-break .kicker{color:#31514F}.path-break h2{font-size:clamp(3rem,6vw,6.2rem)}.path-break p{max-width:450px;line-height:1.7}.map-svg{width:100%;height:200px}.map-svg path{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:5 7;animation:dash 20s linear infinite}.map-svg circle{fill:var(--coral);stroke:var(--ink);stroke-width:1.5}@keyframes dash{to{stroke-dashoffset:-300}}
+.market{background:rgba(16,35,38,.91);backdrop-filter:blur(10px)}.market-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}.filter{padding:9px 14px;border:1px solid #615b6b;border-radius:99px;background:transparent;color:#d0cad5;font-size:.78rem}.filter.active,.filter:hover{background:var(--peri);color:var(--ink);border-color:var(--peri)}.listing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.listing{border:1px solid var(--line);background:#ffffff08;min-width:0;transition:transform .2s,border-color .2s}.listing:hover{transform:translateY(-5px);border-color:var(--peri)}.listing img{width:100%;height:210px;object-fit:cover;display:block}.listing-body{padding:17px}.listing-type{font:9px var(--mono);letter-spacing:.12em;color:var(--peri);text-transform:uppercase}.listing h3{font:600 1.35rem var(--display);margin:8px 0 4px}.listing p{font-size:.8rem;color:#b7b0bd;margin:0 0 13px}.listing-foot{display:flex;justify-content:space-between;align-items:center;font-size:.78rem}.price{font-weight:700;color:var(--jade)}.listing-foot a{color:var(--peri)}
+.tool-area{background:rgba(229,225,213,.91);backdrop-filter:blur(10px);color:var(--ink)}.tool-area .kicker{color:#B84F37}.tool-area .intro{color:#696570}.tool-area h2 em{color:#496D70}.tool-filters{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0}.tool-filter{border:1px solid #aaa4ae;background:transparent;padding:8px 13px;font-size:.78rem;color:#514d57}.tool-filter.active{background:var(--ink);border-color:var(--ink);color:var(--paper)}.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.tool{padding:20px;border:1px solid #c9c3c9;background:#ffffff5c;min-height:190px;display:flex;flex-direction:column}.tool h3{font:600 1.3rem var(--display);margin:18px 0 6px}.tool p{font-size:.78rem;color:#615d67;margin:0}.tool-foot{display:flex;justify-content:space-between;margin-top:auto;padding-top:18px;font:9px var(--mono);color:#3C5D5C}
+.split-features{display:grid;grid-template-columns:1fr 1fr;gap:18px}.feature{min-height:340px;padding:32px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.feature.learn{background:#ded9ce;color:var(--ink)}.feature.earn{background:#24403d;color:var(--paper)}.feature .num{font:9px var(--mono);letter-spacing:.13em;opacity:.65}.feature h3{font:600 clamp(2.3rem,4vw,4rem)/.92 var(--display);letter-spacing:-.07em;max-width:440px;margin:30px 0 10px}.feature p{max-width:390px;font-size:.88rem;line-height:1.7;opacity:.8}.feature .btn{align-self:flex-start}.feature-graphic{position:absolute;width:210px;height:210px;border:1px solid #a8c4b788;border-radius:50%;right:-65px;top:30px;box-shadow:0 0 0 25px #a8c4b712,0 0 0 50px #a8c4b709}.feature-graphic:before,.feature-graphic:after{content:"";position:absolute;inset:30px;border:1px solid #a8c4b788;border-radius:50%;transform:rotate(35deg) scaleX(.6)}.feature-graphic:after{transform:rotate(-35deg) scaleX(.8)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);margin-top:42px}.step{padding:22px 22px 0 0;border-right:1px solid var(--line)}.step+.step{padding-left:22px}.step:last-child{border:0}.step b{font:10px var(--mono);color:var(--coral)}.step h3{font:600 1.5rem var(--display);margin:13px 0 7px}.step p{font-size:.83rem;color:#bdb6c1;max-width:280px}
+.cta-band{background:var(--coral);color:var(--ink);padding:85px 8vw;display:flex;justify-content:space-between;align-items:center;gap:35px}.cta-band h2{font-size:clamp(3rem,6vw,6rem);max-width:700px}.cta-band .btn{background:var(--ink);border-color:var(--ink);color:var(--paper);white-space:nowrap}
+footer{background:#100f15;padding:65px 8vw 25px}.footer-main{display:flex;justify-content:space-between;gap:30px;padding-bottom:50px}.footer-main h2{font-size:clamp(3rem,6vw,6rem)}.footer-links{display:flex;gap:22px;flex-wrap:wrap;color:#aaa5b0;font-size:.8rem}.footer-bottom{border-top:1px solid var(--line);padding-top:18px;display:flex;justify-content:space-between;gap:15px;color:#827d88;font:9px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s,transform .7s}.reveal.in{opacity:1;transform:none}.modal{position:fixed;inset:0;background:#09080dcc;z-index:100;display:none;place-items:center;padding:20px}.modal.open{display:grid}.modal-box{background:var(--paper);color:var(--ink);max-width:500px;width:100%;padding:28px;position:relative}.modal-box h3{font:700 2rem var(--display);margin-bottom:10px}.modal-box p{color:#625d68}.modal-close{position:absolute;right:15px;top:12px;background:none;border:0;font-size:1.5rem;color:var(--ink)}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;z-index:120;background:var(--peri);color:var(--ink);padding:12px 18px;font-weight:700;font-size:.8rem;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:950px){.hero{grid-template-columns:1fr .9fr;padding-left:6vw;padding-right:6vw}.hero h1{font-size:clamp(4rem,9vw,6.4rem)}.section{padding:90px 6vw}.listing-grid{grid-template-columns:repeat(2,1fr)}.tools-grid{grid-template-columns:repeat(2,1fr)}.path-break{padding:75px 6vw}}
+@media(max-width:680px){.top{height:66px;padding:0 5vw}.nav{display:none;position:absolute;top:65px;left:0;right:0;background:var(--ink);padding:22px 5vw;flex-direction:column;align-items:flex-start;border-bottom:1px solid var(--line)}.nav.open{display:flex}.menu{display:block}.top-actions .quiet{display:none}.top-actions .btn{padding:10px 12px;font-size:.75rem}.brand small{display:none}.hero{display:flex;flex-direction:column;align-items:stretch;padding:125px 6vw 55px;min-height:auto}.hero h1{font-size:clamp(4rem,17vw,6.2rem)}.hero-visual{height:390px;margin-top:20px}.hero-meta{margin-top:36px}.section{padding:75px 6vw}.section-head{display:block;margin-bottom:32px}.intro{margin-top:18px}.grid-work{grid-template-columns:1fr}.work-card{min-height:340px}.work-stack{grid-template-columns:1fr 1fr}.work-stack .work-card{min-height:220px}.work-stack h3{font-size:1.2rem}.work-info{left:15px;right:15px;bottom:15px}.work-info h3{font-size:1.5rem}.work-info p{font-size:.72rem}.path-break{grid-template-columns:1fr;gap:10px;padding:70px 6vw}.map-svg{height:140px}.listing-grid{grid-template-columns:1fr 1fr;gap:9px}.listing img{height:135px}.listing-body{padding:12px}.listing h3{font-size:1.1rem}.listing p{font-size:.72rem}.listing-foot{font-size:.7rem}.tools-grid{grid-template-columns:1fr 1fr;gap:8px}.tool{padding:14px;min-height:190px}.tool h3{font-size:1.1rem}.split-features{grid-template-columns:1fr}.feature{min-height:300px;padding:25px}.steps{grid-template-columns:1fr;border:0;gap:16px}.step,.step+.step{padding:15px 0 0;border-top:1px solid var(--line);border-right:0}.cta-band{padding:65px 6vw;display:block}.cta-band .btn{margin-top:25px}.footer-main{display:block}.footer-links{margin-top:25px}.footer-bottom{flex-wrap:wrap}.chapter-count{display:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+
+/* Editorial image treatment and section-aware scene visibility */
+.stock-note{margin:-26px 0 22px;font:10px var(--mono);letter-spacing:.035em;color:rgba(242,240,232,.62)}
+
+.discover,.path-break,.market,.tool-area{background-color:transparent}
+.discover{background:rgba(242,240,232,.84)}
+.path-break{background:rgba(168,196,183,.84)}
+.market{background:rgba(16,35,38,.84)}
+.tool-area{background:rgba(229,225,213,.84)}
+.discover,.path-break,.market,.tool-area{-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+.hero-visual{border:1px solid rgba(168,196,183,.16);background:radial-gradient(ellipse at 50% 48%,rgba(168,196,183,.08),transparent 68%)}
+.visual-label{position:absolute;left:9%;bottom:9%;font:9px var(--mono);letter-spacing:.14em;color:rgba(242,240,232,.65)}
+.visual-label b{color:var(--coral);font-weight:400}
+.work-card img,.listing img{background:#263b3b}
+.work-card img{filter:saturate(.88) contrast(1.04)}
+.work-card:hover img{filter:saturate(1) contrast(1.04)}
+.listing img{transition:filter .35s ease}
+.listing:hover img{filter:saturate(1.08)}
+@media(prefers-reduced-transparency:reduce){
+ .discover,.path-break,.market,.tool-area{background:var(--ink);-webkit-backdrop-filter:none;backdrop-filter:none}
+ .discover,.tool-area{background:#F2F0E8;color:var(--ink)}
+ .path-break{background:#A8C4B7;color:var(--ink)}
+}
+
+/* NJIRA adaptive glass system — navigation and controls only */
+.top{
+  background:linear-gradient(120deg,rgba(16,35,38,.78),rgba(24,49,51,.58));
+  -webkit-backdrop-filter:blur(24px) saturate(155%);
+  backdrop-filter:blur(24px) saturate(155%);
+  border-bottom:1px solid rgba(242,240,232,.2);
+  box-shadow:0 10px 34px rgba(4,15,16,.13),inset 0 1px 0 rgba(255,255,255,.13);
+}
+.top:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,rgba(255,255,255,.07),transparent 34%,rgba(168,196,183,.035) 72%,transparent);opacity:.8}
+.top>*{position:relative;z-index:1}
+.top .btn{background:linear-gradient(135deg,rgba(168,196,183,.92),rgba(168,196,183,.72));border-color:rgba(242,240,232,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 5px 18px rgba(3,14,15,.16)}
+.top .btn:hover{background:var(--paper);color:var(--ink)}
+#journeyProgress{
+  padding:13px 11px;border:1px solid rgba(242,240,232,.19);border-radius:24px;
+  background:linear-gradient(145deg,rgba(242,240,232,.13),rgba(16,35,38,.35));
+  -webkit-backdrop-filter:blur(22px) saturate(145%);backdrop-filter:blur(22px) saturate(145%);
+  box-shadow:0 12px 34px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.2);
+}
+#journeyProgress button{height:5px;border-radius:99px;background:rgba(242,240,232,.36);box-shadow:inset 0 1px 1px rgba(0,0,0,.16)}
+#journeyProgress button[aria-current="step"]{background:var(--coral);box-shadow:0 0 12px rgba(240,120,85,.42)}
+#journeyCount{
+  padding:10px 14px;border:1px solid rgba(242,240,232,.16);border-radius:99px;
+  background:rgba(16,35,38,.5);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);
+  box-shadow:0 8px 24px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.12);
+}
+.btn{min-height:46px;touch-action:manipulation}
+button,a{-webkit-tap-highlight-color:transparent}
+img{max-width:100%}
+.hero,.section,.path-break,.cta-band{scroll-margin-top:88px}
+.work-card,.listing,.tool,.feature{min-width:0}
+.work-info h3,.listing h3,.tool h3,.feature h3{overflow-wrap:anywhere}
+@media(max-width:1024px){
+ .top{padding-left:4vw;padding-right:4vw}
+ .nav{gap:15px;font-size:.8rem}
+ .top-actions{gap:10px}
+ .hero{min-height:760px}
+ .hero-visual{height:480px}
+ .section{padding-left:6vw;padding-right:6vw}
+ .work-card{min-height:370px}
+}
+@media(max-width:760px){
+ .top{height:68px;padding-left:5vw;padding-right:5vw}
+ .nav{display:none;position:absolute;top:67px;left:12px;right:12px;padding:18px;border:1px solid rgba(242,240,232,.2);border-radius:18px;background:rgba(16,35,38,.88);-webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);box-shadow:0 18px 45px rgba(0,0,0,.28)}
+ .nav.open{display:flex;gap:0}
+ .nav a{width:100%;padding:12px 5px;border-bottom:1px solid rgba(242,240,232,.1)}
+ .nav a:last-child{border-bottom:0}
+ .menu{display:block;width:42px;height:42px;border:1px solid rgba(242,240,232,.2);border-radius:50%;background:rgba(242,240,232,.09);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+ .top-actions .quiet{display:none}
+ .top-actions .btn{min-height:40px;padding:9px 12px}
+ #journeyProgress{right:10px;top:auto;bottom:74px;transform:none;flex-direction:row;align-items:center;gap:6px;padding:9px;border-radius:99px}
+ #journeyProgress button{width:9px;height:5px}
+ #journeyProgress button[aria-current="step"]{width:22px}
+ #journeyCount{right:10px;bottom:15px;padding:7px 10px;font-size:8px}
+ .hero{padding-top:112px;min-height:0}
+ .hero-visual{height:330px}
+ .hero-meta{gap:18px;flex-wrap:wrap}
+ .section{padding-top:70px;padding-bottom:70px}
+ .path-break{padding-top:65px;padding-bottom:65px}
+ .cta-band{padding-top:60px;padding-bottom:60px}
+}
+@media(max-width:480px){
+ body{font-size:15px}
+ .brand{font-size:1.35rem}
+ .top-actions .btn{font-size:.7rem;gap:6px}
+ .hero{padding-left:5vw;padding-right:5vw}
+ .hero h1{font-size:clamp(3.45rem,16.8vw,5rem);line-height:.88}
+ .hero-copy{font-size:.94rem}
+ .hero-actions{gap:12px}
+ .hero-actions .btn{width:100%}
+ .hero-meta{gap:14px;margin-top:28px}
+ .hero-meta>div{font-size:8px}
+ .hero-meta strong{font-size:.98rem}
+ .hero-visual{height:255px;margin-top:6px}
+ .section{padding-left:5vw;padding-right:5vw}
+ h2{font-size:clamp(2.55rem,12vw,4rem)}
+ .work-stack{grid-template-columns:1fr}
+ .work-stack .work-card{min-height:230px}
+ .work-card{min-height:290px}
+ .listing-grid{grid-template-columns:1fr}
+ .listing img{height:210px}
+ .tools-grid{grid-template-columns:1fr}
+ .tool{min-height:155px}
+ .feature{min-height:280px;padding:22px}
+ .steps{gap:8px}
+ .step p{max-width:none}
+ .cta-band h2{font-size:clamp(2.7rem,12vw,4rem)}
+ .footer-main h2{font-size:2.8rem}
+ #journeyProgress{bottom:68px}
+}
+@media(hover:none){
+ .work-card:hover img{transform:none}
+ .listing:hover{transform:none}
+ .btn:hover{transform:none}
+}
+@media(prefers-reduced-transparency:reduce){
+ .top,#journeyProgress,#journeyCount,.nav{background:var(--ink);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="top">
+<a class="brand" href="#top" aria-label="NJIRA home"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 27C5 8 19 26 27 5" fill="none" stroke="#A8C4B7" stroke-width="3" stroke-linecap="round"/><circle cx="27" cy="5" r="2.5" fill="#F07855"/></svg>NJIRA<small>/ CREATIVE ECOSYSTEM</small></a>
+<nav class="nav" id="nav"><a href="#discover">Discover</a><a href="#marketplace">Marketplace</a><a href="#tools">Tools</a><a href="#learn">Learn</a><a href="#how">How it works</a></nav>
+<div class="top-actions"><a class="quiet" href="#join">Sign in</a><a class="btn" href="#join">Join NJIRA <span>↗</span></a><button class="menu" id="menu" aria-label="Open navigation" aria-expanded="false">☰</button></div>
+</header>
+<canvas id="journey3d" aria-hidden="true"></canvas>
+<nav id="journeyProgress" aria-label="Page chapters"></nav>
+<div id="journeyCount" aria-live="polite"><b>01</b> / 07 &nbsp; THE START</div>
+<main id="main">
+<section class="hero" data-chapter="THE START">
+<div class="hero-copy-wrap">
+<div class="eyebrow">A creative ecosystem, connected</div>
+<h1>Your next<br>creative <em>path.</em></h1>
+<p class="hero-copy">A place to find the people, tools, knowledge and opportunities that move creative work forward. Built with Malawi's creative community in mind.</p>
+<div class="hero-actions"><a class="btn" href="#marketplace">Explore the ecosystem <span>↗</span></a><a class="underlink" href="#discover">Follow the path ↓</a></div>
+<div class="hero-meta"><div><strong>Discover</strong>People & ideas</div><div><strong>Create</strong>Tools & services</div><div><strong>Earn</strong>Work & products</div></div>
+</div>
+<div class="hero-visual"><div class="visual-grid"></div><div class="visual-label">A CREATIVE JOURNEY / <b>SCROLL TO MOVE</b></div></div>
+</section>
+<section class="section discover" id="discover" data-chapter="DISCOVER">
+<div class="section-head reveal"><div><div class="kicker">01 / Find your direction</div><h2>Good work starts<br>with <em>discovery.</em></h2></div><p class="intro">Explore creative work, meet the people behind it, and find inspiration beyond your usual feed. A starting point for clients and creators alike.</p></div>
+<div class="grid-work reveal">
+<a class="work-card" href="#marketplace"><img loading="lazy" src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85" decoding="async" alt="Creative studio workspace"><div class="work-info"><div><span class="tag">THE CREATIVE COMMUNITY</span><h3>Find your people.</h3><p>Independent talent. Fresh perspectives. Local skill.</p></div><span class="arrow">↗</span></div></a>
+<div class="work-stack">
+<a class="work-card" href="#tools"><img loading="lazy" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=85" decoding="async" alt="Creative working with digital tools"><div class="work-info"><div><span class="tag">TOOLS & RESOURCES</span><h3>Make more possible.</h3><p>Find tools that fit your workflow.</p></div><span class="arrow">↗</span></div></a>
+<a class="work-card" href="#learn"><img loading="lazy" src="https://images.unsplash.com/photo-1455390582262-044c169b8cd4?auto=format&fit=crop&w=1000&q=85" decoding="async" alt="Notebook and writing tools on a desk"><div class="work-info"><div><span class="tag">LEARNING</span><h3>Keep moving.</h3><p>Practical knowledge for the next step.</p></div><span class="arrow">↗</span></div></a>
+</div>
+</div>
+</section>
+<section class="path-break" data-chapter="THE CONNECTION">
+<div class="reveal"><div class="kicker">02 / One connected route</div><h2>From first idea<br>to <em>finished work.</em></h2><p>Creative work rarely happens in a straight line. NJIRA brings the pieces closer together: discovery, collaboration, making, learning and earning.</p></div>
+<div class="map-svg reveal"><svg viewBox="0 0 650 210" preserveAspectRatio="none"><path d="M8 145 C80 145 85 35 180 45 S270 180 350 110 S470 15 535 85 S600 155 642 45"/><circle cx="8" cy="145" r="7"/><circle cx="180" cy="45" r="7"/><circle cx="350" cy="110" r="7"/><circle cx="535" cy="85" r="7"/><circle cx="642" cy="45" r="7"/></svg></div>
+</section>
+<section class="section market" id="marketplace" data-chapter="MAKE & EARN">
+<div class="section-head reveal"><div><div class="kicker">03 / Marketplace</div><h2>Make it. Find it.<br><em>Make it happen.</em></h2></div><p class="intro">Hire creative talent, commission a service, or discover digital and physical products made by independent creators.</p></div>
+<p class="stock-note">Preview imagery from Unsplash. These are illustrative categories, not live creator listings.</p>
+<div class="market-tools reveal" id="marketFilters"><button class="filter active" data-filter="all">Everything</button><button class="filter" data-filter="service">Services</button><button class="filter" data-filter="digital">Digital products</button><button class="filter" data-filter="physical">Physical products</button></div>
+<div class="listing-grid reveal" id="listings">
+<article class="listing" data-kind="service"><img loading="lazy" src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Photographer using a camera"><div class="listing-body"><span class="listing-type">CREATIVE SERVICE</span><h3>Photography & visual stories</h3><p>Campaigns, portraits and event coverage.</p><div class="listing-foot"><span class="price">From MWK —</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="digital"><img loading="lazy" src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Graphic design and printed colour studies"><div class="listing-body"><span class="listing-type">DIGITAL PRODUCT</span><h3>Design assets & templates</h3><p>Editable resources for your next project.</p><div class="listing-foot"><span class="price">Creator-set pricing</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="service"><img loading="lazy" src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Video editing workstation"><div class="listing-body"><span class="listing-type">CREATIVE SERVICE</span><h3>Video production & editing</h3><p>From the first frame to final delivery.</p><div class="listing-foot"><span class="price">From MWK —</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="physical"><img loading="lazy" src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Printed notebooks and stationery"><div class="listing-body"><span class="listing-type">PHYSICAL PRODUCT</span><h3>Objects for creative lives</h3><p>Print, merchandise and handmade pieces.</p><div class="listing-foot"><span class="price">Creator-set pricing</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="digital"><img loading="lazy" src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Artist painting on canvas"><div class="listing-body"><span class="listing-type">DIGITAL PRODUCT</span><h3>Illustration & art resources</h3><p>Brushes, textures, packs and original work.</p><div class="listing-foot"><span class="price">Creator-set pricing</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="service"><img loading="lazy" src="https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Web design on a computer"><div class="listing-body"><span class="listing-type">CREATIVE SERVICE</span><h3>Web & brand design</h3><p>Identity, digital experiences and direction.</p><div class="listing-foot"><span class="price">From MWK —</span><a href="#join">Explore ↗</a></div></div></article>
+</div>
+</section>
+<section class="section tool-area" id="tools" data-chapter="TOOLS">
+<div class="section-head reveal"><div><div class="kicker">04 / Creative toolkit</div><h2>Better tools.<br><em>More room to make.</em></h2></div><p class="intro">A curated directory of creative and AI tools, with free options, platform compatibility and practical guidance for local creators.</p></div>
+<div class="tool-filters reveal" id="toolFilters"><button class="tool-filter active" data-tool="all">All tools</button><button class="tool-filter" data-tool="video">Video</button><button class="tool-filter" data-tool="image">Image</button><button class="tool-filter" data-tool="audio">Audio</button><button class="tool-filter" data-tool="writing">Writing</button></div>
+<div class="tools-grid reveal" id="toolsGrid">
+<article class="tool" data-category="video"><span class="listing-type">VIDEO / FREE + PAID</span><h3>DaVinci Resolve</h3><p>Professional editing and colour grading for desktop workflows.</p><div class="tool-foot"><span>DESKTOP</span><a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener">VISIT ↗</a></div></article>
+<article class="tool" data-category="video"><span class="listing-type">VIDEO / FREE + PAID</span><h3>CapCut</h3><p>Fast edits, captions and social-first video creation.</p><div class="tool-foot"><span>PHONE / WEB / PC</span><a href="https://www.capcut.com" target="_blank" rel="noopener">VISIT ↗</a></div></article>
+<article class="tool" data-category="image"><span class="listing-type">IMAGE / FREE</span><h3>Photopea</h3><p>Browser-based image editing with familiar layer workflows.</p><div class="tool-foot"><span>WEB</span><a href="https://www.photopea.com" target="_blank" rel="noopener">VISIT ↗</a></div></article>
+<article class="tool" data-category="image"><span class="listing-type">IMAGE / FREE + PAID</span><h3>Canva</h3><p>Layouts, presentations, posters and social graphics.</p><div class="tool-foot"><span>PHONE / WEB</span><a href="https://www.canva.com" target="_blank" rel="noopener">VISIT ↗</a></div></article>
+<article class="tool" data-category="audio"><span class="listing-type">AUDIO / FREE</span><h3>Audacity</h3><p>Record, edit and clean audio for video and podcasts.</p><div class="tool-foot"><span>DESKTOP</span><a href="https://www.audacityteam.org" target="_blank" rel="noopener">VISIT ↗</a></div></article>
+<article class="tool" data-category="audio"><span class="listing-type">AUDIO / FREE + PAID</span><h3>ElevenLabs</h3><p>AI voice generation and audio tools.</p><div class="tool-foot"><span>WEB</span><a href="https://elevenlabs.io" target="_blank" rel="noopener">VISIT ↗</a></div></article>
+<article class="tool" data-category="writing"><span class="listing-type">WRITING / FREE + PAID</span><h3>ChatGPT</h3><p>Brainstorm, structure scripts and refine communication.</p><div class="tool-foot"><span>PHONE / WEB</span><a href="https://chatgpt.com" target="_blank" rel="noopener">VISIT ↗</a></div></article>
+<article class="tool" data-category="writing"><span class="listing-type">WRITING / FREE + PAID</span><h3>Claude</h3><p>Drafting, analysis and long-form creative support.</p><div class="tool-foot"><span>PHONE / WEB</span><a href="https://claude.ai" target="_blank" rel="noopener">VISIT ↗</a></div></article>
+</div>
+</section>
+<section class="section" id="learn" data-chapter="LEARN">
+<div class="section-head reveal"><div><div class="kicker">05 / Learn & grow</div><h2>Build the skill.<br><em>Open the next door.</em></h2></div><p class="intro">Practical learning paths, creator knowledge and useful guides that help turn curiosity into confident creative work.</p></div>
+<div class="split-features reveal">
+<article class="feature learn"><div class="feature-graphic"></div><span class="num">FIELD NOTES / 001</span><div><h3>Learn by making.</h3><p>Guides, walkthroughs and learning resources designed around real creative tasks and accessible tools.</p><a class="btn dark" href="#join">Explore learning ↗</a></div></article>
+<article class="feature earn"><div class="feature-graphic"></div><span class="num">CREATOR ECONOMY / 002</span><div><h3>Turn your craft into opportunity.</h3><p>Build a portfolio, package your services, find clients and grow a sustainable creative practice.</p><a class="btn" href="#join">Creator resources ↗</a></div></article>
+</div>
+</section>
+<section class="section" id="how" data-chapter="HOW IT WORKS">
+<div class="section-head reveal"><div><div class="kicker">06 / The working relationship</div><h2>Clear steps.<br><em>Better collaboration.</em></h2></div><p class="intro">A good creative project needs more than a listing. NJIRA is being designed around a transparent process from first message to final delivery.</p></div>
+<div class="steps reveal"><article class="step"><b>01 / DISCOVER</b><h3>Find the right fit.</h3><p>Explore a creator's work, services, products and capabilities.</p></article><article class="step"><b>02 / AGREE</b><h3>Set the brief.</h3><p>Discuss scope, deliverables, milestones, timing and price before work begins.</p></article><article class="step"><b>03 / DELIVER</b><h3>Make progress visible.</h3><p>Keep project communication, files and delivery milestones connected.</p></article></div>
+</section>
+<section class="cta-band" id="join"><div><div class="kicker">Your route starts here</div><h2>Make your next move count.</h2></div><button class="btn" id="joinBtn">Get early access <span>↗</span></button></section>
+</main>
+<footer><div class="footer-main"><div><a class="brand" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 27C5 8 19 26 27 5" fill="none" stroke="#A8C4B7" stroke-width="3" stroke-linecap="round"/><circle cx="27" cy="5" r="2.5" fill="#F07855"/></svg>NJIRA</a><h2>Creative work<br>moves <span style="color:var(--peri)">forward.</span></h2></div><div class="footer-links"><a href="#discover">Discover</a><a href="#marketplace">Marketplace</a><a href="#tools">Tools</a><a href="#learn">Learning</a><a href="#how">How it works</a></div></div><div class="footer-bottom"><span>© <span id="year"></span> NJIRA / Malawi-first, open to the world</span><span>Design prototype — not a live marketplace</span></div></footer>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box"><button class="modal-close" id="closeModal" aria-label="Close">×</button><div class="kicker">EARLY ACCESS</div><h3 id="modalTitle">Join the NJIRA journey.</h3><p>This is a visual prototype. Account registration and early-access collection are not connected yet. The next build will connect this experience to the real platform.</p><button class="btn" id="modalOk">Got it</button></div></div>
+<div class="toast" id="toast" role="status">This is a prototype interaction.</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(()=>{
+const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s)),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+$('#year').textContent=new Date().getFullYear();
+const nav=$('#nav'),menu=$('#menu');menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',open?'true':'false');menu.textContent=open?'×':'☰'});$$('#nav a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰'}));
+$('#marketFilters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;$$('#marketFilters button').forEach(x=>x.classList.toggle('active',x===b));$$('#listings .listing').forEach(c=>c.hidden=b.dataset.filter!=='all'&&c.dataset.kind!==b.dataset.filter)});
+$('#toolFilters').addEventListener('click',e=>{const b=e.target.closest('[data-tool]');if(!b)return;$$('#toolFilters button').forEach(x=>x.classList.toggle('active',x===b));$$('#toolsGrid .tool').forEach(c=>c.hidden=b.dataset.tool!=='all'&&c.dataset.category!==b.dataset.tool)});
+const modal=$('#modal');function openModal(){modal.classList.add('open');$('#closeModal').focus()}function closeModal(){modal.classList.remove('open')}$('#joinBtn').addEventListener('click',openModal);$('#closeModal').addEventListener('click',closeModal);$('#modalOk').addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+const toast=$('#toast');function notify(){toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2200)}
+// Scroll-driven full-screen 3D journey, adapted from the original 102 experience.
+const chapters=[$('.hero'),$('#discover'),$('.path-break'),$('#marketplace'),$('#tools'),$('#learn'),$('#how')];
+const chapterNames=['THE START','DISCOVER','THE CONNECTION','MAKE & EARN','TOOLS','LEARN','HOW IT WORKS'];
+const progressNav=$('#journeyProgress');
+chapters.forEach((section,i)=>{
+ const button=document.createElement('button');
+ button.type='button';
+ button.setAttribute('aria-label','Go to '+chapterNames[i]);
+ button.addEventListener('click',()=>section.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'}));
+ progressNav.append(button);
+});
+function markChapter(i){
+ $$('#journeyProgress button').forEach((button,j)=>button.setAttribute('aria-current',i===j?'step':'false'));
+ $('#journeyCount').innerHTML='<b>'+String(i+1).padStart(2,'0')+'</b> / '+String(chapters.length).padStart(2,'0')+' &nbsp; '+chapterNames[i];
+}
+const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+ if(entry.isIntersecting){entry.target.classList.add('in');revealObserver.unobserve(entry.target)}
+}),{threshold:.12});
+$$('.reveal').forEach(el=>revealObserver.observe(el));
+const chapterObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+ if(entry.isIntersecting)markChapter(chapters.indexOf(entry.target));
+}),{rootMargin:'-45% 0px -45% 0px'});
+chapters.forEach(section=>chapterObserver.observe(section));
+markChapter(0);
+
+function initJourney(){
+ const canvas=$('#journey3d');
+ if(!window.THREE||!window.WebGLRenderingContext)return;
+ let renderer;
+ try{renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true})}catch(e){canvas.style.display='none';return}
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,innerWidth<700?1.15:1.6));
+ const scene=new THREE.Scene();
+ scene.fog=new THREE.FogExp2(0x102326,.024);
+ const camera=new THREE.PerspectiveCamera(innerWidth<700?70:55,1,.1,140);
+ scene.add(new THREE.HemisphereLight(0xe6f0e9,0x102326,1.55));
+ const key=new THREE.DirectionalLight(0xf2f0e8,1.55);key.position.set(3,6,5);scene.add(key);
+ const curve=new THREE.CatmullRomCurve3([
+  [0,0,0],[3,.8,-8],[-3,-.4,-16],[3,.6,-24],[-2.5,0,-32],[0,.4,-42]
+ ].map(p=>new THREE.Vector3(...p)));
+ const material=(color,emissive=0)=>new THREE.MeshStandardMaterial({color,roughness:.48,metalness:.16,emissive:color,emissiveIntensity:emissive});
+ scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve,280,.055,10,false),material(0xa8c4b7,.72)));
+ const addBox=(group,w,h,d,color,x,y,z)=>{
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material(color,.08));
+  mesh.position.set(x,y,z);group.add(mesh);return mesh;
+ };
+ const place=(group,t)=>{const p=curve.getPointAt(t);group.position.set(p.x+2.1,p.y+.25,p.z);group.scale.setScalar(1.35);scene.add(group)};
+ // Camera / image / sound / design objects along the route.
+ const cameraObject=new THREE.Group();
+ addBox(cameraObject,1.2,.8,.6,0x24464a,0,0,0);
+ addBox(cameraObject,.42,.18,.4,0xf2f0e8,-.2,.5,0);
+ const lens=new THREE.Mesh(new THREE.CylinderGeometry(.32,.26,.4,24),material(0x102326));
+ lens.rotation.x=Math.PI/2;lens.position.set(.15,0,.45);cameraObject.add(lens);
+ const lensGlass=new THREE.Mesh(new THREE.CircleGeometry(.22,24),material(0xf07855,.9));
+ lensGlass.position.set(.15,0,.66);cameraObject.add(lensGlass);place(cameraObject,.13);
+ const picture=new THREE.Group();
+ addBox(picture,1.8,1.3,.08,0xf2f0e8,0,0,0);
+ addBox(picture,1.6,1.1,.1,0x526f73,0,0,.06);
+ const sun=new THREE.Mesh(new THREE.CircleGeometry(.2,24),material(0xf07855,.8));sun.position.set(.4,.25,.13);picture.add(sun);
+ const hill=new THREE.Mesh(new THREE.ConeGeometry(.6,.6,4),material(0xb5c6a2,.2));hill.position.set(-.3,-.25,.13);hill.rotation.y=Math.PI/4;hill.scale.z=.1;picture.add(hill);place(picture,.37);
+ const audio=new THREE.Group(),bars=[];
+ for(let i=0;i<15;i++){const h=.5+Math.abs(Math.sin(i*.7))*.8;bars.push(addBox(audio,.1,h,.1,i%3?0xb5c6a2:0xf07855,(i-7)*.18,0,0))}
+ place(audio,.64);
+ const design=new THREE.Group();
+ [1.6,1.3,1.5,.9].forEach((w,i)=>addBox(design,w,.1,.06,0xf2f0e8,-(1.6-w)/2,.4-i*.3,0));
+ const cursor=addBox(design,.07,.26,.06,0xa8c4b7,.15,-.8,0);place(design,.9);
+ const particleCount=innerWidth<700?150:320,positions=new Float32Array(particleCount*3);
+ for(let i=0;i<particleCount;i++){positions[i*3]=(Math.random()-.5)*20;positions[i*3+1]=(Math.random()-.5)*10;positions[i*3+2]=-Math.random()*48}
+ const particleGeometry=new THREE.BufferGeometry();particleGeometry.setAttribute('position',new THREE.BufferAttribute(positions,3));
+ scene.add(new THREE.Points(particleGeometry,new THREE.PointsMaterial({color:0xf2f0e8,size:.045,transparent:true,opacity:.48})));
+ // Chapter waypoints make the path readable and tie the 3D world to page structure.
+  const waypoints=[];
+  chapters.forEach((section,i)=>{
+   const marker=new THREE.Group();
+   const haloMat=material(i===0?0xf07855:0xa8c4b7,.8);
+   const halo=new THREE.Mesh(new THREE.TorusGeometry(.48,.018,8,40),haloMat);
+   const core=new THREE.Mesh(new THREE.SphereGeometry(.075,14,10),material(0xf2f0e8,.35));
+   core.position.z=.025;marker.add(halo,core);
+   marker.userData={halo,haloMat,index:i};scene.add(marker);waypoints.push(marker);
+  });
+  function syncWaypoints(maxScroll){
+   chapters.forEach((section,i)=>{
+    const stop=Math.min(1,Math.max(0,section.offsetTop/maxScroll));
+    const p=curve.getPointAt(.015+stop*.96);
+    waypoints[i].position.set(p.x-1.1,p.y-.15,p.z);
+   });
+  }
+  const pointer={x:0,y:0,targetX:0,targetY:0};
+ addEventListener('pointermove',e=>{pointer.targetX=e.clientX/innerWidth-.5;pointer.targetY=e.clientY/innerHeight-.5},{passive:true});
+ function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.fov=innerWidth<700?70:55;camera.updateProjectionMatrix()}
+ resize();addEventListener('resize',resize);
+ let progress=0,frameId=0;
+  function render(ms=0){
+   if(!reduced)frameId=requestAnimationFrame(render);
+   if(document.hidden)return;
+   const maxScroll=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+   const target=Math.min(1,Math.max(0,scrollY/maxScroll));
+   syncWaypoints(maxScroll);
+   progress+=(target-progress)*(reduced?1:.065);
+   pointer.x+=(pointer.targetX-pointer.x)*.045;pointer.y+=(pointer.targetY-pointer.y)*.045;
+   const t=.015+progress*.96,p=curve.getPointAt(Math.min(.99,t)),look=curve.getPointAt(Math.min(1,t+.05)),seconds=ms/1000;
+   camera.position.set(p.x+pointer.x*.72,p.y+.28-pointer.y*.48,p.z+1.65);
+   camera.lookAt(look.x,look.y+.08,look.z);
+   if(!reduced){
+    camera.rotation.z+=Math.sin(seconds*.18)*.0009;
+    cameraObject.rotation.y=Math.sin(seconds*.42)*.32;
+    picture.rotation.y=Math.sin(seconds*.38+1)*.24;
+    design.rotation.y=Math.sin(seconds*.4+2)*.22;
+    bars.forEach((bar,i)=>bar.scale.y=.72+.28*Math.abs(Math.sin(seconds*1.6+i*.58)));
+    cursor.visible=Math.floor(seconds*1.5)%2===0;
+    waypoints.forEach((marker,i)=>{
+     const stop=Math.min(1,Math.max(0,chapters[i].offsetTop/Math.max(1,document.documentElement.scrollHeight-innerHeight)));
+     const distance=Math.abs(progress-stop);
+     const active=distance<.075;
+     marker.userData.halo.rotation.z=seconds*.16*(i%2?-1:1);
+     marker.scale.setScalar((active?1.22:1)+Math.sin(seconds*1.1+i*.7)*.025);
+     marker.userData.haloMat.color.setHex(active?0xf07855:0xa8c4b7);
+     marker.userData.haloMat.emissive.setHex(active?0xf07855:0xa8c4b7);
+     marker.userData.haloMat.emissiveIntensity=active?1.35:.42;
+    });
+   }
+   renderer.render(scene,camera);
+  }
+  if(reduced){addEventListener('scroll',()=>render(performance.now()),{passive:true});render(performance.now())}
+  else{frameId=requestAnimationFrame(render)}
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!reduced){cancelAnimationFrame(frameId);frameId=requestAnimationFrame(render)}});
+ }
+ try{initJourney()}catch(error){$('#journey3d').style.display='none'}
+})();
+</script>
+</body>
+</html>

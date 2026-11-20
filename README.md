@@ -8,7 +8,7 @@ This repository contains a **frontend design prototype**, not a production marke
 
 ### Main entry point
 
-Open `index.html` in a modern browser. It is the current unified experience and combines:
+Open `index.html` in a modern browser, or use `/prototype.html` from the Next.js application. It is the current unified experience and combines:
 - The chapter-led scroll journey and progress rail from the original `102.html`, with section-aligned 3D waypoints.
 - The newer visual direction and interactive Three.js creative path.
 - Discovery, marketplace categories, creative tools, learning, and project-workflow storytelling.
@@ -32,7 +32,7 @@ Open `index.html` in a modern browser. It is the current unified experience and 
 
 The marketplace cards and creator examples are illustrative, not live listings. Stock photography is used as temporary art direction and must be replaced or supplemented with properly licensed creator-owned media before launch. Tool listings and pricing should be verified before publication.
 
-Authentication, database, messaging, project briefs, proposals, milestones, file storage, checkout, PayChangu payment processing, seller payouts, subscriptions, admin controls, and production security are **not implemented** in this frontend prototype. The `foundation/marketplace-paychangu` branch adds an initial Prisma data model, architecture decisions, a server-side PayChangu adapter, security baseline, repository safeguards and CI checks as engineering groundwork; these are not yet wired into a running application. The early-access button only explains this limitation; it does not collect user data.
+Authentication, database, messaging, project briefs, proposals, milestones, file storage, checkout, PayChangu payment processing, digital-tool supplier fulfilment, seller payouts, subscriptions, admin controls, and production security are **not implemented** in this frontend prototype. The `foundation/marketplace-paychangu` branch adds an initial Prisma data model, architecture decisions, a server-side PayChangu adapter, security baseline, repository safeguards and CI checks as engineering groundwork; these are not yet wired into a running application. The early-access button only explains this limitation; it does not collect user data.
 
 ## Running
 
@@ -45,3 +45,61 @@ Open `index.html` in a modern browser. An internet connection is needed for Goog
 3. Define the NJIRA domain model and API contracts before implementing marketplace workflows.
 4. Build and test authentication, database, media storage, creator profiles, listings, briefs, proposals and messaging.
 5. Integrate PayChangu only after the order, payment-state, webhook and reconciliation flows are designed and tested.
+
+
+## NJIRA Tools engineering foundation
+
+The `feature/creator-tools-commerce` branch extends the marketplace data model for a focused catalogue of creator software, AI services and creator infrastructure. It adds supplier, product-plan, digital-service order and fulfilment records, plus separate payment/ledger references. See `docs/creator-tools-commerce.md` and `docs/supplier-onboarding-checklist.md`. This is a domain foundation, not a live reseller relationship or working supplier integration.
+
+### Legal and regulatory baseline
+
+The branch also includes `docs/legal-and-regulatory-compliance.md`, a Malawi-first compliance baseline covering data protection, electronic commerce, consumer rights, payments, tax, intellectual property and jurisdiction-specific international obligations. It is an engineering checklist, not a legal opinion or proof of compliance. No paid launch should proceed until qualified Malawi counsel, tax advice and the relevant regulators/payment-provider requirements have been addressed.
+
+
+
+### Compliance engineering groundwork
+
+The branch includes `docs/compliance-engineering-controls.md`. The Prisma schema now models versioned legal documents, acceptance events, optional consent history, data-subject request cases, compliance incidents, jurisdiction feature approvals and transaction legal snapshots. These are data-model foundations only: no production migration, application workflow, UI, RBAC enforcement or legal certification exists yet.
+
+
+## Application runtime foundation
+
+This branch now introduces a Next.js App Router application using TypeScript strict mode. The application entry point is `src/app`; the original visual prototype is copied to `public/prototype.html` and is available at `/prototype.html` when served by the Next.js app.
+
+### Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`. Before opening a production pull request, run:
+
+```bash
+npm run typecheck
+npm run lint
+npm run build
+```
+
+GitHub Actions runs those checks for application changes.
+
+### What is and is not live
+
+The new home page is an application shell and product-direction page. The three pathway labels describe workstreams, not working marketplace features. There is still no production authentication, user database connection, listing API, order workflow, admin RBAC, privacy request UI, jurisdiction enforcement, supplier integration or checkout. No real products, prices, payment collection or fulfilment are exposed. The PayChangu adapter is server-side groundwork only; it must be wired to persisted orders and independently tested before use.
+
+
+### Application runtime and database connection
+
+The branch now includes a Next.js App Router shell, strict TypeScript, a server-only Prisma client and a database-aware health endpoint at `/api/health`. The endpoint returns HTTP 503 with a generic status when the database is not configured or cannot be reached; it does not expose connection details.
+
+Prisma Client is generated during dependency installation. Set a real PostgreSQL `DATABASE_URL` in the local environment before expecting the health endpoint to report a connected database. No production database credentials are stored in the repository, and no migration has been applied.
+
+
+## Authentication foundation
+
+NJIRA's Better Auth integration and its current launch gates are documented in [`docs/authentication.md`](docs/authentication.md). Registration remains disabled until verified email delivery is configured. Do not treat the auth scaffold as a production-ready account system.
+
+
+## Authentication and account onboarding
+
+NJIRA now includes Better Auth account screens, email verification and password-reset flows, a Resend transactional-email adapter, and creator/client profile onboarding. Public registration remains disabled until `RESEND_API_KEY` and `AUTH_EMAIL_FROM` are configured with a verified sender domain. See `docs/authentication.md` for deployment requirements. This is a staged foundation: no production migration has been applied and account/profile functionality must pass deployed end-to-end testing before public launch.
