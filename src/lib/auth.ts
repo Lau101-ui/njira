@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { twoFactor } from "better-auth/plugins";
-import { db } from "@/server/db";
+import { prisma } from "@/server/db";
 
 const appUrl = process.env.BETTER_AUTH_URL;
 const secret = process.env.BETTER_AUTH_SECRET;
@@ -14,7 +14,7 @@ export const auth = betterAuth({
   appName: "NJIRA",
   baseURL: appUrl,
   secret,
-  database: prismaAdapter(db, { provider: "postgresql" }),
+  database: prismaAdapter(prisma, { provider: "postgresql" }),
   trustedOrigins: appUrl ? [appUrl] : ["http://localhost:3000"],
   emailAndPassword: {
     enabled: true,
