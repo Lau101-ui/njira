@@ -74,6 +74,10 @@ Start with a small, verified catalogue rather than dozens of unverified logos. S
 The initial build adds the domain model and operational rules only. It does not yet provide a live supplier integration, fulfilment automation, subscription renewal engine, or production checkout UI.
 
 
+## Legal and regulatory launch gate
+
+Before activating any tool, apply `docs/legal-and-regulatory-compliance.md` and the supplier checklist. NJIRA must establish whether it is acting as seller/reseller, agent or marketplace intermediary for that SKU; written resale authority and vendor-term compliance are mandatory. Checkout must disclose the supplier/seller, exact entitlement, total price, region, delivery, renewal and cancellation/refund terms. Apply Malawi electronic-commerce withdrawal rules product-by-product; do not impose a blanket digital-products-no-refunds rule. Do not hold customer funds or offer wallet/escrow functionality without a documented legal basis and any required RBM authorisation. Cross-border personal-data transfers and foreign-currency payments require their own documented approvals.
+
 ## Commercial model
 
 Use the proposed fee policy in [revenue-model-and-launch-fees.md](./revenue-model-and-launch-fees.md) when designing checkout, order snapshots and ledger postings. Tool prices must be approved per SKU from verified supplier and cost-to-serve data; a simple retail-minus-supplier spread is not net profit. Do not activate a plan until its contribution margin and fulfilment route are validated.
