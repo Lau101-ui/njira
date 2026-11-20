@@ -14,6 +14,8 @@ concurrency:
 jobs:
   validate:
     name: Typecheck, lint and production build
+    env:
+      DATABASE_URL: postgresql://ci:ci@127.0.0.1:5432/njira?schema=public
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
