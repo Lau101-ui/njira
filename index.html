@@ -226,7 +226,7 @@ function initJourney(){
  addEventListener('pointermove',e=>{pointer.targetX=e.clientX/innerWidth-.5;pointer.targetY=e.clientY/innerHeight-.5},{passive:true});
  function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.fov=innerWidth<700?70:55;camera.updateProjectionMatrix()}
  resize();addEventListener('resize',resize);
- let let progress=0,frameId=0;
+ let progress=0,frameId=0;
   function render(ms=0){
    if(!reduced)frameId=requestAnimationFrame(render);
    if(document.hidden)return;
