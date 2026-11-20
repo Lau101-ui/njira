@@ -11,6 +11,12 @@ Use one checklist per supplier and per product/plan. A supplier being approved d
 - [ ] Support escalation contact and service-level expectations recorded.
 
 ## Product and regional eligibility
+- [ ] NJIRA's legal role for this product (seller/reseller, agent or marketplace intermediary) documented and approved.
+- [ ] Malawi counsel or designated compliance owner has confirmed required licence/authorisation and applicable consumer obligations.
+- [ ] Resale, sublicensing, code distribution and trademark/marketing rights are expressly permitted in writing.
+- [ ] Seller-of-record, tax invoice issuer, customer support owner and refund/chargeback responsibility are explicit.
+- [ ] Applicable withdrawal/cooling-off exceptions and any required express early-performance consent have been reviewed; no blanket statutory-rights waiver is used.
+
 - [ ] Product and exact plan/edition identified.
 - [ ] Malawi availability confirmed by vendor/supplier.
 - [ ] Customer account country/region restrictions understood.
