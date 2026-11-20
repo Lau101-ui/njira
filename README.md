@@ -86,3 +86,10 @@ GitHub Actions runs those checks for application changes.
 ### What is and is not live
 
 The new home page is an application shell and product-direction page. The three pathway labels describe workstreams, not working marketplace features. There is still no production authentication, user database connection, listing API, order workflow, admin RBAC, privacy request UI, jurisdiction enforcement, supplier integration or checkout. No real products, prices, payment collection or fulfilment are exposed. The PayChangu adapter is server-side groundwork only; it must be wired to persisted orders and independently tested before use.
+
+
+### Application runtime and database connection
+
+The branch now includes a Next.js App Router shell, strict TypeScript, a server-only Prisma client and a database-aware health endpoint at `/api/health`. The endpoint returns HTTP 503 with a generic status when the database is not configured or cannot be reached; it does not expose connection details.
+
+Prisma Client is generated during dependency installation. Set a real PostgreSQL `DATABASE_URL` in the local environment before expecting the health endpoint to report a connected database. No production database credentials are stored in the repository, and no migration has been applied.
