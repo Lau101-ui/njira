@@ -9,10 +9,10 @@ This repository contains a **frontend design prototype**, not a production marke
 ### Main entry point
 
 Open `index.html` in a modern browser. It is the current unified experience and combines:
-- The chapter-led scroll journey and progress rail from the original `102.html`.
+- The chapter-led scroll journey and progress rail from the original `102.html`, with section-aligned 3D waypoints.
 - The newer visual direction and interactive Three.js creative path.
 - Discovery, marketplace categories, creative tools, learning, and project-workflow storytelling.
-- Selected stock-photo references to demonstrate the intended visual treatment.
+- Selected Unsplash stock-photo references to demonstrate the intended visual treatment; these are illustrative placeholders, not creator submissions.
 
 ### Reference prototypes
 
@@ -21,11 +21,12 @@ Open `index.html` in a modern browser. It is the current unified experience and 
 
 ## Visual system
 
-- Deep aubergine ink: `#17151D`
-- Warm parchment: `#F3EFE6`
-- Mineral periwinkle: `#A9B7FF`
-- Ember coral: `#FF715B`
-- Muted jade: `#B5CFC7`
+- Deep Lake: `#102326`
+- Warm Limestone: `#F2F0E8`
+- Lake Mist: `#A8C4B7`
+- Signal Orange: `#F07855`
+- Reed Green: `#B5C6A2`
+- Stone: `#E5E1D5`
 
 ## Important prototype limitations
 
@@ -39,8 +40,8 @@ Open `index.html` in a modern browser. An internet connection is needed for Goog
 
 ## Next engineering steps
 
-1. Browser-test desktop and mobile layouts, navigation, filters, scroll behavior, and the 3D interaction.
-2. Improve reduced-motion and low-performance-device behavior; verify keyboard accessibility.
-3. Replace the static sample content with real marketplace data.
-4. Convert the approved frontend into a maintainable application structure.
-5. Build and test authentication, database, storage, messaging, marketplace workflows, and payment integration separately.
+1. Complete hands-on browser QA on desktop and mobile, including navigation, filters, scroll behaviour, WebGL fallback and reduced-motion behaviour.
+2. Convert the approved visual prototype into a maintainable application structure without losing its visual identity.
+3. Define the NJIRA domain model and API contracts before implementing marketplace workflows.
+4. Build and test authentication, database, media storage, creator profiles, listings, briefs, proposals and messaging.
+5. Integrate PayChangu only after the order, payment-state, webhook and reconciliation flows are designed and tested.
