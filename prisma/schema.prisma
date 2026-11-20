@@ -133,6 +133,26 @@ enum SupplierStatus {
   SUSPENDED
 }
 
+enum SupplierApplicationStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  NEEDS_INFORMATION
+  APPROVED
+  REJECTED
+  WITHDRAWN
+}
+
+enum SupplierReviewDecision {
+  OPENED
+  INFORMATION_REQUESTED
+  INFORMATION_RECEIVED
+  APPROVED
+  REJECTED
+  WITHDRAWN
+  REOPENED
+}
+
 enum DigitalToolStatus {
   DRAFT
   ACTIVE
@@ -247,6 +267,7 @@ model User {
   reviewsReceived   Review[]     @relation("ReviewTarget")
   conversationMemberships ConversationParticipant[]
   digitalServiceOrders DigitalServiceOrder[]
+  supplierApplications SupplierApplication[]
   legalAcceptances   LegalAcceptance[]
   privacyRequests    DataSubjectRequest[] @relation("PrivacyRequestSubject")
   consentEvents      ConsentEvent[]
@@ -595,6 +616,73 @@ model Review {
   @@index([creatorId, createdAt])
 }
 
+
+/// A supplier's application to supply products/services through NJIRA.
+/// Evidence itself lives in a restricted encrypted document store; only references and
+/// review metadata belong here. Approval is a human compliance/operations decision.
+model SupplierApplication {
+  id                       String                    @id @default(cuid())
+  applicationNumber        String                    @unique
+  applicantUserId          String?
+  supplierId               String?
+  status                   SupplierApplicationStatus @default(DRAFT)
+  legalBusinessName        String
+  tradingName              String?
+  countryCode              String
+  registrationNumber       String?
+  taxIdentifierReference   String?
+  businessAddress          String                    @db.Text
+  websiteUrl               String?
+  contactName              String
+  contactEmail             String
+  contactPhone             String?
+  productCategories        String[]
+  brandsOrProducts         String[]                  @default([])
+  supplySourceDescription  String                    @db.Text
+  authorisationType        String?
+  authorisationEvidenceRef String?
+  registrationEvidenceRef  String?
+  ownershipEvidenceRef     String?
+  proposedFulfillment      String                    @db.Text
+  regionalRestrictions     String?                   @db.Text
+  settlementCurrencies     String[]
+  refundAndSupportProcess  String                    @db.Text
+  agreementEvidenceRef     String?
+  applicantDeclarationAt   DateTime?
+  submittedAt              DateTime?
+  reviewedAt               DateTime?
+  decidedAt                DateTime?
+  decisionReasonCode       String?
+  internalNotes            String?                   @db.Text
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  applicant                User?                     @relation(fields: [applicantUserId], references: [id], onDelete: SetNull)
+  supplier                 DigitalToolSupplier?      @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  reviewEvents             SupplierApplicationReviewEvent[]
+
+  @@index([status, submittedAt])
+  @@index([applicantUserId, createdAt])
+  @@index([countryCode, status])
+  @@index([supplierId, status])
+}
+
+/// Append-only decision trail. Admin identity is stored as an opaque auth subject until
+/// the application has a concrete staff/role model; API access must be admin-only.
+model SupplierApplicationReviewEvent {
+  id              String                   @id @default(cuid())
+  applicationId   String
+  reviewerSubject String
+  decision        SupplierReviewDecision
+  reasonCode      String?
+  note            String?                  @db.Text
+  evidenceRef     String?
+  createdAt       DateTime                 @default(now())
+  application     SupplierApplication     @relation(fields: [applicationId], references: [id], onDelete: Restrict)
+
+  @@index([applicationId, createdAt])
+  @@index([reviewerSubject, createdAt])
+}
+
 /// External digital products and services that NJIRA is authorised and operationally able to fulfil.
 model DigitalToolSupplier {
   id                  String         @id @default(cuid())
@@ -611,6 +699,7 @@ model DigitalToolSupplier {
   updatedAt           DateTime       @updatedAt
   tools               DigitalTool[]
   orders              DigitalServiceOrder[]
+  applications        SupplierApplication[]
 
   @@index([status, name])
 }
