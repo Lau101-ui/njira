@@ -50,6 +50,11 @@ enum PaymentProvider {
   PAYCHANGU
 }
 
+enum PaymentPurpose {
+  ORDER_CHECKOUT
+  PROPOSAL_APPLICATION_FEE
+}
+
 enum BriefStatus {
   OPEN
   REVIEWING
@@ -97,6 +102,7 @@ enum LedgerEntryType {
   CREATOR_PAYABLE
   REFUND
   PAYOUT
+  PLATFORM_APPLICATION_FEE
   ADJUSTMENT
 }
 
@@ -236,6 +242,11 @@ model Proposal {
   creator        CreatorProfile @relation(fields: [creatorId], references: [id])
   creatorUser    User           @relation("ProposalCreator", fields: [creatorUserId], references: [id])
   milestones     Milestone[]
+  applicationFeeAmount   Decimal?  @db.Decimal(14, 2)
+  applicationFeeCurrency String?
+  applicationFeeRequired Boolean   @default(false)
+  payments       Payment[]
+  ledgerEntries  LedgerEntry[]
 
   @@unique([briefId, creatorId])
   @@index([creatorId, status])
@@ -313,10 +324,12 @@ model Payment {
   expiresAt         DateTime?
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
-  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order             Order?          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  proposal          Proposal?       @relation(fields: [proposalId], references: [id], onDelete: Cascade)
   webhookEvents     WebhookEvent[]
 
   @@index([orderId, status])
+  @@index([proposalId, status])
   @@index([status, createdAt])
   @@unique([provider, providerReference])
 }
@@ -341,17 +354,20 @@ model WebhookEvent {
 
 model LedgerEntry {
   id          String          @id @default(cuid())
-  orderId     String
+  orderId     String?
+  proposalId  String?
   type        LedgerEntryType
   amount      Decimal         @db.Decimal(14, 2)
   currency    String
   reference   String
   description String?
   createdAt   DateTime        @default(now())
-  order       Order           @relation(fields: [orderId], references: [id])
+  order       Order?          @relation(fields: [orderId], references: [id])
+  proposal    Proposal?       @relation(fields: [proposalId], references: [id])
 
   @@unique([type, reference])
   @@index([orderId, createdAt])
+  @@index([proposalId, createdAt])
 }
 
 model CreatorPaymentAccount {
