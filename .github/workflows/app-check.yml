@@ -1,0 +1,27 @@
+name: Application checks
+on:
+  pull_request:
+    paths: ["src/**","package.json","package-lock.json","tsconfig.json","next.config.ts","eslint.config.mjs",".github/workflows/app-check.yml"]
+  push:
+    branches: [main]
+    paths: ["src/**","package.json","package-lock.json","tsconfig.json","next.config.ts","eslint.config.mjs",".github/workflows/app-check.yml"]
+permissions:
+  contents: read
+concurrency:
+  group: app-check-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    name: Typecheck, lint and production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
