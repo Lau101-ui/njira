@@ -7,14 +7,15 @@ export function WorkspaceActions({ creator }: { creator: boolean }) {
   const [error, setError] = useState("");
   async function submit(event: FormEvent<HTMLFormElement>, endpoint: string) {
     event.preventDefault(); setBusy(true); setError(""); setNotice("");
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const payload = Object.fromEntries(form.entries());
     try {
       const response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error ?? "Could not save.");
       setNotice("Saved as a private draft. It is not publicly visible.");
-      event.currentTarget.reset();
+      formElement.reset();
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Something went wrong."); }
     finally { setBusy(false); }
   }
