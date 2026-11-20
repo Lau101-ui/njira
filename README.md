@@ -93,3 +93,8 @@ The new home page is an application shell and product-direction page. The three 
 The branch now includes a Next.js App Router shell, strict TypeScript, a server-only Prisma client and a database-aware health endpoint at `/api/health`. The endpoint returns HTTP 503 with a generic status when the database is not configured or cannot be reached; it does not expose connection details.
 
 Prisma Client is generated during dependency installation. Set a real PostgreSQL `DATABASE_URL` in the local environment before expecting the health endpoint to report a connected database. No production database credentials are stored in the repository, and no migration has been applied.
+
+
+## Authentication foundation
+
+NJIRA's Better Auth integration and its current launch gates are documented in [`docs/authentication.md`](docs/authentication.md). Registration remains disabled until verified email delivery is configured. Do not treat the auth scaffold as a production-ready account system.
