@@ -60,3 +60,29 @@ The branch also includes `docs/legal-and-regulatory-compliance.md`, a Malawi-fir
 ### Compliance engineering groundwork
 
 The branch includes `docs/compliance-engineering-controls.md`. The Prisma schema now models versioned legal documents, acceptance events, optional consent history, data-subject request cases, compliance incidents, jurisdiction feature approvals and transaction legal snapshots. These are data-model foundations only: no production migration, application workflow, UI, RBAC enforcement or legal certification exists yet.
+
+
+## Application runtime foundation
+
+This branch now introduces a Next.js App Router application using TypeScript strict mode. The application entry point is `src/app`; the original visual prototype remains available at `/index.html` when served by the Next.js app.
+
+### Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`. Before opening a production pull request, run:
+
+```bash
+npm run typecheck
+npm run lint
+npm run build
+```
+
+GitHub Actions runs those checks for application changes.
+
+### What is and is not live
+
+The new home page is an application shell and product-direction page. The three pathway labels describe workstreams, not working marketplace features. There is still no production authentication, user database connection, listing API, order workflow, admin RBAC, privacy request UI, jurisdiction enforcement, supplier integration or checkout. No real products, prices, payment collection or fulfilment are exposed. The PayChangu adapter is server-side groundwork only; it must be wired to persisted orders and independently tested before use.
