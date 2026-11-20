@@ -8,7 +8,7 @@ This repository contains a **frontend design prototype**, not a production marke
 
 ### Main entry point
 
-Open `index.html` in a modern browser. It is the current unified experience and combines:
+Open `index.html` in a modern browser, or use `/prototype.html` from the Next.js application. It is the current unified experience and combines:
 - The chapter-led scroll journey and progress rail from the original `102.html`, with section-aligned 3D waypoints.
 - The newer visual direction and interactive Three.js creative path.
 - Discovery, marketplace categories, creative tools, learning, and project-workflow storytelling.
@@ -64,7 +64,7 @@ The branch includes `docs/compliance-engineering-controls.md`. The Prisma schema
 
 ## Application runtime foundation
 
-This branch now introduces a Next.js App Router application using TypeScript strict mode. The application entry point is `src/app`; the original visual prototype remains available at `/index.html` when served by the Next.js app.
+This branch now introduces a Next.js App Router application using TypeScript strict mode. The application entry point is `src/app`; the original visual prototype is copied to `public/prototype.html` and is available at `/prototype.html` when served by the Next.js app.
 
 ### Run locally
 
