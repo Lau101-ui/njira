@@ -54,6 +54,27 @@ footer{background:#100f15;padding:65px 8vw 25px}.footer-main{display:flex;justif
 @media(max-width:680px){.top{height:66px;padding:0 5vw}.nav{display:none;position:absolute;top:65px;left:0;right:0;background:var(--ink);padding:22px 5vw;flex-direction:column;align-items:flex-start;border-bottom:1px solid var(--line)}.nav.open{display:flex}.menu{display:block}.top-actions .quiet{display:none}.top-actions .btn{padding:10px 12px;font-size:.75rem}.brand small{display:none}.hero{display:flex;flex-direction:column;align-items:stretch;padding:125px 6vw 55px;min-height:auto}.hero h1{font-size:clamp(4rem,17vw,6.2rem)}.hero-visual{height:390px;margin-top:20px}.hero-meta{margin-top:36px}.section{padding:75px 6vw}.section-head{display:block;margin-bottom:32px}.intro{margin-top:18px}.grid-work{grid-template-columns:1fr}.work-card{min-height:340px}.work-stack{grid-template-columns:1fr 1fr}.work-stack .work-card{min-height:220px}.work-stack h3{font-size:1.2rem}.work-info{left:15px;right:15px;bottom:15px}.work-info h3{font-size:1.5rem}.work-info p{font-size:.72rem}.path-break{grid-template-columns:1fr;gap:10px;padding:70px 6vw}.map-svg{height:140px}.listing-grid{grid-template-columns:1fr 1fr;gap:9px}.listing img{height:135px}.listing-body{padding:12px}.listing h3{font-size:1.1rem}.listing p{font-size:.72rem}.listing-foot{font-size:.7rem}.tools-grid{grid-template-columns:1fr 1fr;gap:8px}.tool{padding:14px;min-height:190px}.tool h3{font-size:1.1rem}.split-features{grid-template-columns:1fr}.feature{min-height:300px;padding:25px}.steps{grid-template-columns:1fr;border:0;gap:16px}.step,.step+.step{padding:15px 0 0;border-top:1px solid var(--line);border-right:0}.cta-band{padding:65px 6vw;display:block}.cta-band .btn{margin-top:25px}.footer-main{display:block}.footer-links{margin-top:25px}.footer-bottom{flex-wrap:wrap}.chapter-count{display:none}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
 
+/* Editorial image treatment and section-aware scene visibility */
+.discover,.path-break,.market,.tool-area{background-color:transparent}
+.discover{background:rgba(242,240,232,.84)}
+.path-break{background:rgba(168,196,183,.84)}
+.market{background:rgba(16,35,38,.84)}
+.tool-area{background:rgba(229,225,213,.84)}
+.discover,.path-break,.market,.tool-area{-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+.hero-visual{border:1px solid rgba(168,196,183,.16);background:radial-gradient(ellipse at 50% 48%,rgba(168,196,183,.08),transparent 68%)}
+.visual-label{position:absolute;left:9%;bottom:9%;font:9px var(--mono);letter-spacing:.14em;color:rgba(242,240,232,.65)}
+.visual-label b{color:var(--coral);font-weight:400}
+.work-card img,.listing img{background:#263b3b}
+.work-card img{filter:saturate(.88) contrast(1.04)}
+.work-card:hover img{filter:saturate(1) contrast(1.04)}
+.listing img{transition:filter .35s ease}
+.listing:hover img{filter:saturate(1.08)}
+@media(prefers-reduced-transparency:reduce){
+ .discover,.path-break,.market,.tool-area{background:var(--ink);-webkit-backdrop-filter:none;backdrop-filter:none}
+ .discover,.tool-area{background:#F2F0E8;color:var(--ink)}
+ .path-break{background:#A8C4B7;color:var(--ink)}
+}
+
 /* NJIRA adaptive glass system — navigation and controls only */
 .top{
   background:linear-gradient(120deg,rgba(16,35,38,.78),rgba(24,49,51,.58));
@@ -178,10 +199,10 @@ img{max-width:100%}
 <section class="section discover" id="discover" data-chapter="DISCOVER">
 <div class="section-head reveal"><div><div class="kicker">01 / Find your direction</div><h2>Good work starts<br>with <em>discovery.</em></h2></div><p class="intro">Explore creative work, meet the people behind it, and find inspiration beyond your usual feed. A starting point for clients and creators alike.</p></div>
 <div class="grid-work reveal">
-<a class="work-card" href="#marketplace"><img loading="lazy" src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85" alt="Creative studio workspace"><div class="work-info"><div><span class="tag">THE CREATIVE COMMUNITY</span><h3>Find your people.</h3><p>Independent talent. Fresh perspectives. Local skill.</p></div><span class="arrow">↗</span></div></a>
+<a class="work-card" href="#marketplace"><img loading="lazy" src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85" decoding="async" alt="Creative studio workspace"><div class="work-info"><div><span class="tag">THE CREATIVE COMMUNITY</span><h3>Find your people.</h3><p>Independent talent. Fresh perspectives. Local skill.</p></div><span class="arrow">↗</span></div></a>
 <div class="work-stack">
-<a class="work-card" href="#tools"><img loading="lazy" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=85" alt="Creative working with digital tools"><div class="work-info"><div><span class="tag">TOOLS & RESOURCES</span><h3>Make more possible.</h3><p>Find tools that fit your workflow.</p></div><span class="arrow">↗</span></div></a>
-<a class="work-card" href="#learn"><img loading="lazy" src="https://images.unsplash.com/photo-1455390582262-044c169b8cd4?auto=format&fit=crop&w=1000&q=85" alt="Notebook and writing tools on a desk"><div class="work-info"><div><span class="tag">LEARNING</span><h3>Keep moving.</h3><p>Practical knowledge for the next step.</p></div><span class="arrow">↗</span></div></a>
+<a class="work-card" href="#tools"><img loading="lazy" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=85" decoding="async" alt="Creative working with digital tools"><div class="work-info"><div><span class="tag">TOOLS & RESOURCES</span><h3>Make more possible.</h3><p>Find tools that fit your workflow.</p></div><span class="arrow">↗</span></div></a>
+<a class="work-card" href="#learn"><img loading="lazy" src="https://images.unsplash.com/photo-1455390582262-044c169b8cd4?auto=format&fit=crop&w=1000&q=85" decoding="async" alt="Notebook and writing tools on a desk"><div class="work-info"><div><span class="tag">LEARNING</span><h3>Keep moving.</h3><p>Practical knowledge for the next step.</p></div><span class="arrow">↗</span></div></a>
 </div>
 </div>
 </section>
@@ -193,12 +214,12 @@ img{max-width:100%}
 <div class="section-head reveal"><div><div class="kicker">03 / Marketplace</div><h2>Make it. Find it.<br><em>Make it happen.</em></h2></div><p class="intro">Hire creative talent, commission a service, or discover digital and physical products made by independent creators.</p></div>
 <div class="market-tools reveal" id="marketFilters"><button class="filter active" data-filter="all">Everything</button><button class="filter" data-filter="service">Services</button><button class="filter" data-filter="digital">Digital products</button><button class="filter" data-filter="physical">Physical products</button></div>
 <div class="listing-grid reveal" id="listings">
-<article class="listing" data-kind="service"><img loading="lazy" src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=900&q=85" alt="Photographer using a camera"><div class="listing-body"><span class="listing-type">CREATIVE SERVICE</span><h3>Photography & visual stories</h3><p>Campaigns, portraits and event coverage.</p><div class="listing-foot"><span class="price">From MWK —</span><a href="#join">Explore ↗</a></div></div></article>
-<article class="listing" data-kind="digital"><img loading="lazy" src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=900&q=85" alt="Graphic design and printed colour studies"><div class="listing-body"><span class="listing-type">DIGITAL PRODUCT</span><h3>Design assets & templates</h3><p>Editable resources for your next project.</p><div class="listing-foot"><span class="price">Creator-set pricing</span><a href="#join">Explore ↗</a></div></div></article>
-<article class="listing" data-kind="service"><img loading="lazy" src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=900&q=85" alt="Video editing workstation"><div class="listing-body"><span class="listing-type">CREATIVE SERVICE</span><h3>Video production & editing</h3><p>From the first frame to final delivery.</p><div class="listing-foot"><span class="price">From MWK —</span><a href="#join">Explore ↗</a></div></div></article>
-<article class="listing" data-kind="physical"><img loading="lazy" src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85" alt="Printed notebooks and stationery"><div class="listing-body"><span class="listing-type">PHYSICAL PRODUCT</span><h3>Objects for creative lives</h3><p>Print, merchandise and handmade pieces.</p><div class="listing-foot"><span class="price">Creator-set pricing</span><a href="#join">Explore ↗</a></div></div></article>
-<article class="listing" data-kind="digital"><img loading="lazy" src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=85" alt="Artist painting on canvas"><div class="listing-body"><span class="listing-type">DIGITAL PRODUCT</span><h3>Illustration & art resources</h3><p>Brushes, textures, packs and original work.</p><div class="listing-foot"><span class="price">Creator-set pricing</span><a href="#join">Explore ↗</a></div></div></article>
-<article class="listing" data-kind="service"><img loading="lazy" src="https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&w=900&q=85" alt="Web design on a computer"><div class="listing-body"><span class="listing-type">CREATIVE SERVICE</span><h3>Web & brand design</h3><p>Identity, digital experiences and direction.</p><div class="listing-foot"><span class="price">From MWK —</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="service"><img loading="lazy" src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Photographer using a camera"><div class="listing-body"><span class="listing-type">CREATIVE SERVICE</span><h3>Photography & visual stories</h3><p>Campaigns, portraits and event coverage.</p><div class="listing-foot"><span class="price">From MWK —</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="digital"><img loading="lazy" src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Graphic design and printed colour studies"><div class="listing-body"><span class="listing-type">DIGITAL PRODUCT</span><h3>Design assets & templates</h3><p>Editable resources for your next project.</p><div class="listing-foot"><span class="price">Creator-set pricing</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="service"><img loading="lazy" src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Video editing workstation"><div class="listing-body"><span class="listing-type">CREATIVE SERVICE</span><h3>Video production & editing</h3><p>From the first frame to final delivery.</p><div class="listing-foot"><span class="price">From MWK —</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="physical"><img loading="lazy" src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Printed notebooks and stationery"><div class="listing-body"><span class="listing-type">PHYSICAL PRODUCT</span><h3>Objects for creative lives</h3><p>Print, merchandise and handmade pieces.</p><div class="listing-foot"><span class="price">Creator-set pricing</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="digital"><img loading="lazy" src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Artist painting on canvas"><div class="listing-body"><span class="listing-type">DIGITAL PRODUCT</span><h3>Illustration & art resources</h3><p>Brushes, textures, packs and original work.</p><div class="listing-foot"><span class="price">Creator-set pricing</span><a href="#join">Explore ↗</a></div></div></article>
+<article class="listing" data-kind="service"><img loading="lazy" src="https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&w=900&q=85" decoding="async" alt="Web design on a computer"><div class="listing-body"><span class="listing-type">CREATIVE SERVICE</span><h3>Web & brand design</h3><p>Identity, digital experiences and direction.</p><div class="listing-foot"><span class="price">From MWK —</span><a href="#join">Explore ↗</a></div></div></article>
 </div>
 </section>
 <section class="section tool-area" id="tools" data-chapter="TOOLS">
@@ -314,13 +335,19 @@ function initJourney(){
   const waypoints=[];
   chapters.forEach((section,i)=>{
    const marker=new THREE.Group();
-   const halo=new THREE.Mesh(new THREE.TorusGeometry(.48,.018,8,40),material(i===0?0xf07855:0xa8c4b7,.8));
+   const haloMat=material(i===0?0xf07855:0xa8c4b7,.8);
+   const halo=new THREE.Mesh(new THREE.TorusGeometry(.48,.018,8,40),haloMat);
    const core=new THREE.Mesh(new THREE.SphereGeometry(.075,14,10),material(0xf2f0e8,.35));
    core.position.z=.025;marker.add(halo,core);
-   const p=curve.getPointAt(.015+i/(chapters.length-1)*.96);
-   marker.position.set(p.x-1.1,p.y-.15,p.z);
-   marker.userData={halo,index:i};scene.add(marker);waypoints.push(marker);
+   marker.userData={halo,haloMat,index:i};scene.add(marker);waypoints.push(marker);
   });
+  function syncWaypoints(maxScroll){
+   chapters.forEach((section,i)=>{
+    const stop=Math.min(1,Math.max(0,section.offsetTop/maxScroll));
+    const p=curve.getPointAt(.015+stop*.96);
+    waypoints[i].position.set(p.x-1.1,p.y-.15,p.z);
+   });
+  }
   const pointer={x:0,y:0,targetX:0,targetY:0};
  addEventListener('pointermove',e=>{pointer.targetX=e.clientX/innerWidth-.5;pointer.targetY=e.clientY/innerHeight-.5},{passive:true});
  function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.fov=innerWidth<700?70:55;camera.updateProjectionMatrix()}
@@ -331,6 +358,7 @@ function initJourney(){
    if(document.hidden)return;
    const maxScroll=Math.max(1,document.documentElement.scrollHeight-innerHeight);
    const target=Math.min(1,Math.max(0,scrollY/maxScroll));
+   syncWaypoints(maxScroll);
    progress+=(target-progress)*(reduced?1:.065);
    pointer.x+=(pointer.targetX-pointer.x)*.045;pointer.y+=(pointer.targetY-pointer.y)*.045;
    const t=.015+progress*.96,p=curve.getPointAt(Math.min(.99,t)),look=curve.getPointAt(Math.min(1,t+.05)),seconds=ms/1000;
@@ -344,8 +372,14 @@ function initJourney(){
     bars.forEach((bar,i)=>bar.scale.y=.72+.28*Math.abs(Math.sin(seconds*1.6+i*.58)));
     cursor.visible=Math.floor(seconds*1.5)%2===0;
     waypoints.forEach((marker,i)=>{
+     const stop=Math.min(1,Math.max(0,chapters[i].offsetTop/Math.max(1,document.documentElement.scrollHeight-innerHeight)));
+     const distance=Math.abs(progress-stop);
+     const active=distance<.075;
      marker.userData.halo.rotation.z=seconds*.16*(i%2?-1:1);
-     marker.scale.setScalar(1+Math.sin(seconds*1.35+i*.7)*.07);
+     marker.scale.setScalar((active?1.22:1)+Math.sin(seconds*1.1+i*.7)*.025);
+     marker.userData.haloMat.color.setHex(active?0xf07855:0xa8c4b7);
+     marker.userData.haloMat.emissive.setHex(active?0xf07855:0xa8c4b7);
+     marker.userData.haloMat.emissiveIntensity=active?1.35:.42;
     });
    }
    renderer.render(scene,camera);
