@@ -50,3 +50,8 @@ Open `index.html` in a modern browser. An internet connection is needed for Goog
 ## NJIRA Tools engineering foundation
 
 The `feature/creator-tools-commerce` branch extends the marketplace data model for a focused catalogue of creator software, AI services and creator infrastructure. It adds supplier, product-plan, digital-service order and fulfilment records, plus separate payment/ledger references. See `docs/creator-tools-commerce.md` and `docs/supplier-onboarding-checklist.md`. This is a domain foundation, not a live reseller relationship or working supplier integration.
+
+### Legal and regulatory baseline
+
+The branch also includes `docs/legal-and-regulatory-compliance.md`, a Malawi-first compliance baseline covering data protection, electronic commerce, consumer rights, payments, tax, intellectual property and jurisdiction-specific international obligations. It is an engineering checklist, not a legal opinion or proof of compliance. No paid launch should proceed until qualified Malawi counsel, tax advice and the relevant regulators/payment-provider requirements have been addressed.
+
