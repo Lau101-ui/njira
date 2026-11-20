@@ -98,8 +98,3 @@ Prisma Client is generated during dependency installation. Set a real PostgreSQL
 ## Authentication foundation
 
 NJIRA's Better Auth integration and its current launch gates are documented in [`docs/authentication.md`](docs/authentication.md). Registration remains disabled until verified email delivery is configured. Do not treat the auth scaffold as a production-ready account system.
-
-
-## Authentication foundation
-
-NJIRA's Better Auth integration and its current launch gates are documented in [`docs/authentication.md`](docs/authentication.md). Registration remains disabled until verified email delivery is configured. Do not treat the auth scaffold as a production-ready account system.

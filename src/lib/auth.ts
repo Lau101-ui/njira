@@ -42,7 +42,5 @@ export const auth = betterAuth({
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production"
   },
-  plugins: [
-    twoFactor({ issuer: "NJIRA" })
-  ]
+  plugins: [twoFactor({ issuer: "NJIRA" })]
 });

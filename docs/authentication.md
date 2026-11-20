@@ -4,13 +4,13 @@
 
 ## Provider decision
 
-NJIRA uses Better Auth with the existing PostgreSQL/Prisma data layer. This avoids introducing a separate identity database and supports email/password sessions plus authenticator-app TOTP and recovery codes. The dependency is pinned to the stable 1.7.26 release rather than a beta or release candidate.
+NJIRA uses Better Auth with the existing PostgreSQL/Prisma data layer. This avoids introducing a separate identity database and supports email/password sessions plus authenticator-app TOTP and recovery codes. The dependency is pinned to stable release 1.7.26 rather than a beta or release candidate.
 
 ## Implemented in this branch
 
 - Better Auth server instance using the Prisma adapter.
 - Next.js App Router handler at `/api/auth/[...all]`.
-- Database models for users' auth profile fields, sessions, linked accounts, verification records and TOTP recovery data.
+- Database models for user auth profile fields, sessions, linked accounts, verification records and TOTP recovery data.
 - Email/password authentication configured with email verification required.
 - TOTP two-factor plugin configured.
 - Production startup fails if `BETTER_AUTH_URL` or `BETTER_AUTH_SECRET` is missing.
