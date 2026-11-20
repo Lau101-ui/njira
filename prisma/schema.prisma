@@ -313,7 +313,12 @@ model Order {
   status          OrderStatus @default(PENDING_PAYMENT)
   currency        String
   subtotal        Decimal     @db.Decimal(14, 2)
+  /// Immutable fee amount charged for this order, calculated at order creation.
   platformFee     Decimal     @default(0) @db.Decimal(14, 2)
+  /// Immutable commission rate snapshot as a fraction (for example, 0.08 = 8%).
+  /// Application code must set this explicitly for new paid orders; zero remains safe for legacy/free orders.
+  platformFeeRate Decimal     @default(0) @db.Decimal(7, 6)
+  /// Actual provider fee once confirmed from provider settlement/reconciliation.
   providerFee     Decimal?    @db.Decimal(14, 2)
   total           Decimal     @db.Decimal(14, 2)
   createdAt       DateTime    @default(now())
