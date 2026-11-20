@@ -32,7 +32,7 @@ Open `index.html` in a modern browser. It is the current unified experience and 
 
 The marketplace cards and creator examples are illustrative, not live listings. Stock photography is used as temporary art direction and must be replaced or supplemented with properly licensed creator-owned media before launch. Tool listings and pricing should be verified before publication.
 
-Authentication, database, messaging, project briefs, proposals, milestones, file storage, checkout, PayChangu payment processing, seller payouts, subscriptions, admin controls, and production security are **not implemented** in this frontend prototype. The `foundation/marketplace-paychangu` branch adds an initial Prisma data model, architecture decisions, a server-side PayChangu adapter, security baseline, repository safeguards and CI checks as engineering groundwork; these are not yet wired into a running application. The early-access button only explains this limitation; it does not collect user data.
+Authentication, database, messaging, project briefs, proposals, milestones, file storage, checkout, PayChangu payment processing, digital-tool supplier fulfilment, seller payouts, subscriptions, admin controls, and production security are **not implemented** in this frontend prototype. The `foundation/marketplace-paychangu` branch adds an initial Prisma data model, architecture decisions, a server-side PayChangu adapter, security baseline, repository safeguards and CI checks as engineering groundwork; these are not yet wired into a running application. The early-access button only explains this limitation; it does not collect user data.
 
 ## Running
 
@@ -45,3 +45,8 @@ Open `index.html` in a modern browser. An internet connection is needed for Goog
 3. Define the NJIRA domain model and API contracts before implementing marketplace workflows.
 4. Build and test authentication, database, media storage, creator profiles, listings, briefs, proposals and messaging.
 5. Integrate PayChangu only after the order, payment-state, webhook and reconciliation flows are designed and tested.
+
+
+## NJIRA Tools engineering foundation
+
+The `feature/creator-tools-commerce` branch extends the marketplace data model for a focused catalogue of creator software, AI services and creator infrastructure. It adds supplier, product-plan, digital-service order and fulfilment records, plus separate payment/ledger references. See `docs/creator-tools-commerce.md` and `docs/supplier-onboarding-checklist.md`. This is a domain foundation, not a live reseller relationship or working supplier integration.
