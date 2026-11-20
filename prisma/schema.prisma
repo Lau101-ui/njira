@@ -53,6 +53,56 @@ enum PaymentProvider {
 enum PaymentPurpose {
   ORDER_CHECKOUT
   PROPOSAL_APPLICATION_FEE
+  DIGITAL_TOOL_PURCHASE
+}
+
+enum SupplierStatus {
+  PENDING_REVIEW
+  ACTIVE
+  PAUSED
+  SUSPENDED
+}
+
+enum DigitalToolStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum ToolBillingInterval {
+  ONE_TIME
+  MONTHLY
+  ANNUAL
+  USAGE_BASED
+}
+
+enum DigitalServiceOrderStatus {
+  PENDING_PAYMENT
+  PAID
+  FULFILLMENT_PENDING
+  FULFILLING
+  FULFILLED
+  FAILED
+  CANCELLED
+  REFUND_PENDING
+  REFUNDED
+  DISPUTED
+}
+
+enum FulfillmentStatus {
+  QUEUED
+  IN_PROGRESS
+  DELIVERED
+  FAILED
+  REVOKED
+}
+
+enum FulfillmentMethod {
+  AUTHORIZED_RESELLER
+  REDEMPTION_CODE
+  DIRECT_VENDOR_CHECKOUT_ASSIST
+  MANUAL_APPROVED
 }
 
 enum BriefStatus {
@@ -104,6 +154,8 @@ enum LedgerEntryType {
   PAYOUT
   PLATFORM_APPLICATION_FEE
   ADJUSTMENT
+  DIGITAL_TOOL_SALE
+  SUPPLIER_COST
 }
 
 model User {
@@ -124,6 +176,7 @@ model User {
   reviewsWritten    Review[]     @relation("ReviewAuthor")
   reviewsReceived   Review[]     @relation("ReviewTarget")
   conversationMemberships ConversationParticipant[]
+  digitalServiceOrders DigitalServiceOrder[]
 
   @@unique([authProvider, authSubject])
   @@index([status, createdAt])
@@ -311,7 +364,10 @@ model Milestone {
 
 model Payment {
   id                String          @id @default(cuid())
-  orderId           String
+  orderId           String?
+  proposalId        String?
+  digitalServiceOrderId String?
+  purpose           PaymentPurpose @default(ORDER_CHECKOUT)
   provider          PaymentProvider @default(PAYCHANGU)
   status            PaymentStatus   @default(PENDING)
   txRef             String          @unique
@@ -326,10 +382,12 @@ model Payment {
   updatedAt         DateTime        @updatedAt
   order             Order?          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   proposal          Proposal?       @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  digitalServiceOrder DigitalServiceOrder? @relation(fields: [digitalServiceOrderId], references: [id], onDelete: Cascade)
   webhookEvents     WebhookEvent[]
 
   @@index([orderId, status])
   @@index([proposalId, status])
+  @@index([digitalServiceOrderId, status])
   @@index([status, createdAt])
   @@unique([provider, providerReference])
 }
@@ -356,6 +414,7 @@ model LedgerEntry {
   id          String          @id @default(cuid())
   orderId     String?
   proposalId  String?
+  digitalServiceOrderId String?
   type        LedgerEntryType
   amount      Decimal         @db.Decimal(14, 2)
   currency    String
@@ -364,10 +423,12 @@ model LedgerEntry {
   createdAt   DateTime        @default(now())
   order       Order?          @relation(fields: [orderId], references: [id])
   proposal    Proposal?       @relation(fields: [proposalId], references: [id])
+  digitalServiceOrder DigitalServiceOrder? @relation(fields: [digitalServiceOrderId], references: [id])
 
   @@unique([type, reference])
   @@index([orderId, createdAt])
   @@index([proposalId, createdAt])
+  @@index([digitalServiceOrderId, createdAt])
 }
 
 model CreatorPaymentAccount {
@@ -449,3 +510,131 @@ model Review {
   @@unique([authorId, orderId])
   @@index([creatorId, createdAt])
 }
+
+/// External digital products and services that NJIRA is authorised and operationally able to fulfil.
+model DigitalToolSupplier {
+  id                  String         @id @default(cuid())
+  name                String
+  slug                String         @unique
+  status              SupplierStatus @default(PENDING_REVIEW)
+  websiteUrl          String?
+  supportEmail        String?
+  agreementReference  String?
+  credentialVaultRef  String?
+  settlementCurrency  String?
+  notes               String?        @db.Text
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  tools               DigitalTool[]
+  orders              DigitalServiceOrder[]
+
+  @@index([status, name])
+}
+
+/// A catalogue entry; publication requires an approved supplier or fulfilment route.
+model DigitalTool {
+  id                    String            @id @default(cuid())
+  supplierId            String?
+  slug                  String            @unique
+  name                  String
+  vendorName            String
+  category              String
+  shortDescription      String
+  description           String            @db.Text
+  status                DigitalToolStatus @default(DRAFT)
+  officialProductUrl    String?
+  officialTermsUrl      String?
+  supportUrl            String?
+  supportedCountries    String[]          @default(["MW"])
+  regionNotes           String?           @db.Text
+  requiresCustomerEmail Boolean           @default(true)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  supplier              DigitalToolSupplier? @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  plans                 DigitalToolPlan[]
+
+  @@index([status, category])
+  @@index([supplierId, status])
+}
+
+/// A specific SKU/term. Price and currency are authoritative server-side values.
+model DigitalToolPlan {
+  id                    String             @id @default(cuid())
+  toolId                String
+  code                  String
+  name                  String
+  description           String?
+  billingInterval       ToolBillingInterval
+  termDays              Int?
+  currency              String
+  price                 Decimal            @db.Decimal(14, 2)
+  supplierCost          Decimal?           @db.Decimal(14, 2)
+  supplierCostCurrency  String?
+  fulfillmentMethod     FulfillmentMethod
+  externalProductRef    String?
+  isActive              Boolean            @default(false)
+  requiresRenewalNotice Boolean            @default(false)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  tool                  DigitalTool        @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  orders                DigitalServiceOrder[]
+
+  @@unique([toolId, code])
+  @@index([toolId, isActive])
+}
+
+/// Customer purchase snapshot, separate from creator-service Orders.
+model DigitalServiceOrder {
+  id                    String                    @id @default(cuid())
+  orderNumber           String                    @unique
+  buyerId               String
+  toolPlanId            String
+  supplierId            String?
+  status                DigitalServiceOrderStatus @default(PENDING_PAYMENT)
+  currency              String
+  unitPrice             Decimal                   @db.Decimal(14, 2)
+  quantity              Int                       @default(1)
+  total                 Decimal                   @db.Decimal(14, 2)
+  supplierCost          Decimal?                  @db.Decimal(14, 2)
+  supplierCostCurrency  String?
+  customerEmail         String?
+  customerAccountRef    String?
+  idempotencyKey        String                    @unique
+  supplierOrderRef      String?
+  paidAt                DateTime?
+  fulfilledAt           DateTime?
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  buyer                 User                      @relation(fields: [buyerId], references: [id])
+  plan                  DigitalToolPlan           @relation(fields: [toolPlanId], references: [id])
+  supplier              DigitalToolSupplier?      @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  payments              Payment[]
+  ledgerEntries         LedgerEntry[]
+  fulfillments          DigitalServiceFulfillment[]
+
+  @@index([buyerId, createdAt])
+  @@index([status, createdAt])
+  @@index([supplierId, status])
+  @@unique([supplierId, supplierOrderRef])
+}
+
+/// Delivery audit trail. Never store passwords, card details or reusable account credentials.
+model DigitalServiceFulfillment {
+  id                    String              @id @default(cuid())
+  orderId               String
+  status                FulfillmentStatus   @default(QUEUED)
+  method                FulfillmentMethod
+  supplierReference     String?
+  secureDeliveryRef     String?
+  customerInstructions  String?             @db.Text
+  failureCode           String?
+  failureDetails        String?             @db.Text
+  deliveredAt           DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  order                 DigitalServiceOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, createdAt])
+  @@index([status, createdAt])
+}
+
