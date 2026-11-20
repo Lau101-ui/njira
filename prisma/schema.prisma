@@ -204,6 +204,7 @@ enum FulfillmentMethod {
 }
 
 enum BriefStatus {
+  DRAFT
   OPEN
   REVIEWING
   AWARDED
