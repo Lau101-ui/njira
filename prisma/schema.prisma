@@ -13,6 +13,14 @@ enum UserStatus {
   DELETED
 }
 
+enum StaffRole {
+  PLATFORM_ADMIN
+  SUPPLIER_OPERATIONS
+  COMPLIANCE_REVIEWER
+  PRIVACY_OFFICER
+  FINANCE_REVIEWER
+}
+
 enum LegalDocumentType {
   TERMS_OF_SERVICE
   PRIVACY_NOTICE
@@ -271,6 +279,7 @@ model User {
   legalAcceptances   LegalAcceptance[]
   privacyRequests    DataSubjectRequest[] @relation("PrivacyRequestSubject")
   consentEvents      ConsentEvent[]
+  staffRoleAssignments StaffRoleAssignment[]
 
   @@unique([authProvider, authSubject])
   @@index([status, createdAt])
@@ -941,4 +950,40 @@ model ConsentEvent {
 
   @@index([userId, purpose, occurredAt])
   @@index([purpose, occurredAt])
+}
+
+
+/// Explicit, time-bounded staff permissions. No role is granted by default.
+/// Assignment writes must be restricted to a separately controlled provisioning process.
+model StaffRoleAssignment {
+  id                 String    @id @default(cuid())
+  userId             String
+  role               StaffRole
+  grantedBySubject   String
+  grantReason        String
+  grantedAt          DateTime  @default(now())
+  expiresAt          DateTime?
+  revokedAt          DateTime?
+  revokedBySubject   String?
+  revocationReason   String?
+  user               User      @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, role])
+  @@index([role, revokedAt, expiresAt])
+}
+
+/// Append-only audit trail for privileged role changes; never treat this as a substitute
+/// for database-level access controls or independent security logging.
+model StaffRoleAuditEvent {
+  id                 String    @id @default(cuid())
+  targetUserId       String
+  role               StaffRole
+  action             String
+  actorSubject       String
+  reason             String
+  assignmentId       String?
+  occurredAt         DateTime  @default(now())
+
+  @@index([targetUserId, occurredAt])
+  @@index([actorSubject, occurredAt])
 }
