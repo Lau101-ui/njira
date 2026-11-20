@@ -5,6 +5,9 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/server/db";
 import { SignOutButton } from "@/components/sign-out-button";
 import { WorkspaceActions } from "@/components/workspace-actions";
+import { CreatorProfileEditor } from "@/components/creator-profile-editor";
+
+export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -12,8 +15,11 @@ export default async function AccountPage() {
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
     select: {
-      name: true, email: true, status: true,
-      creatorProfile: { select: { id: true, displayName: true, handle: true, city: true, listings: { where: { status: "DRAFT" }, select: { id: true } } } },
+      name: true, status: true,
+      creatorProfile: { select: {
+        id: true, displayName: true, handle: true, city: true, headline: true, bio: true, website: true, acceptingWork: true,
+        listings: { where: { status: "DRAFT" }, select: { id: true } }
+      } },
       clientProfile: { select: { id: true, displayName: true, company: true, city: true } },
       briefs: { where: { status: "DRAFT" }, select: { id: true } }
     }
@@ -24,6 +30,7 @@ export default async function AccountPage() {
   const profile = user.creatorProfile ?? user.clientProfile;
   const detail = user.creatorProfile ? "@" + user.creatorProfile.handle : (user.clientProfile?.company || "Client profile");
   const drafts = creator ? user.creatorProfile?.listings.length ?? 0 : user.briefs.length;
+
   return <main className="account-shell">
     <header className="onboarding-top"><Link className="auth-wordmark" href="/">NJIRA<span>®</span></Link><SignOutButton /></header>
     <section className="account-content account-content-wide">
@@ -33,10 +40,11 @@ export default async function AccountPage() {
       <div className="workspace-overview">
         <div><span>ACCOUNT</span><strong>ACTIVE</strong></div>
         <div><span>PRIVATE DRAFTS</span><strong>{drafts.toString().padStart(2, "0")}</strong></div>
-        <div><span>VISIBILITY</span><strong>PRIVATE</strong></div>
+        <div><span>VISIBILITY</span><strong>{creator ? "PROFILE + LISTINGS" : "PRIVATE"}</strong></div>
       </div>
-      <WorkspaceActions creator={creator} />
-      <p className="workspace-footnote">Drafts are saved to your account and are not publicly discoverable. Publishing, editing existing drafts, moderation, proposals and payments are not enabled in this stage.</p>
+      {user.creatorProfile && <CreatorProfileEditor profile={user.creatorProfile}/>}
+      <WorkspaceActions creator={creator}/>
+      <p className="workspace-footnote">Service and brief drafts remain private. Public profile edits update your creator page immediately. Publishing listings, portfolio media uploads, moderation, proposals and payments are not enabled yet.</p>
     </section>
   </main>;
 }
