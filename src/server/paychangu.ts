@@ -68,8 +68,8 @@ export async function createPayChanguCheckout(
   if (!input.txRef || input.txRef.length > 100) {
     throw new Error("A unique transaction reference is required");
   }
-  if (toMinorUnits(input.amount) <= 0n) {
-    throw new Error("Payment amount must be greater than zero");
+  if (!/^\\d+$/.test(input.amount) || Number(input.amount) <= 0 || Number(input.amount) > 2147483647) {
+    throw new Error("PayChangu amount must be a positive int32 in the selected currency");
   }
 
   const response = await fetch(`${API_BASE_URL}/payment`, {
