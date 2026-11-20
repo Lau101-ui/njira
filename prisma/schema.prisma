@@ -1,0 +1,421 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum ListingType {
+  SERVICE
+  DIGITAL_PRODUCT
+  PHYSICAL_PRODUCT
+}
+
+enum ListingStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  REFUNDED
+  DISPUTED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+  EXPIRED
+  PARTIALLY_REFUNDED
+  REFUNDED
+}
+
+enum PaymentProvider {
+  PAYCHANGU
+}
+
+enum BriefStatus {
+  OPEN
+  REVIEWING
+  AWARDED
+  CANCELLED
+  CLOSED
+}
+
+enum ProposalStatus {
+  SUBMITTED
+  SHORTLISTED
+  ACCEPTED
+  DECLINED
+  WITHDRAWN
+}
+
+enum MilestoneStatus {
+  PENDING
+  FUNDED
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+  RELEASED
+  DISPUTED
+}
+
+enum MessageType {
+  TEXT
+  SYSTEM
+  FILE
+}
+
+enum PayoutStatus {
+  QUEUED
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  REVERSED
+}
+
+enum LedgerEntryType {
+  BUYER_PAYMENT
+  PROVIDER_FEE
+  PLATFORM_COMMISSION
+  CREATOR_PAYABLE
+  REFUND
+  PAYOUT
+  ADJUSTMENT
+}
+
+model User {
+  id                String       @id @default(cuid())
+  authProvider      String
+  authSubject       String
+  email             String       @unique
+  status            UserStatus   @default(ACTIVE)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  clientProfile     ClientProfile?
+  creatorProfile    CreatorProfile?
+  listings          Listing[]    @relation("ListingOwner")
+  buyerOrders       Order[]      @relation("OrderBuyer")
+  briefs            Brief[]      @relation("BriefClient")
+  proposals         Proposal[]   @relation("ProposalCreator")
+  sentMessages      Message[]    @relation("MessageSender")
+  reviewsWritten    Review[]     @relation("ReviewAuthor")
+  reviewsReceived   Review[]     @relation("ReviewTarget")
+
+  @@unique([authProvider, authSubject])
+  @@index([status, createdAt])
+}
+
+model ClientProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  displayName String
+  company     String?
+  bio         String?  @db.Text
+  countryCode String   @default("MW")
+  city        String?
+  website     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CreatorProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  handle          String   @unique
+  displayName     String
+  headline        String?
+  bio             String?  @db.Text
+  countryCode     String   @default("MW")
+  city            String?
+  website          String?
+  isVerified      Boolean  @default(false)
+  acceptingWork   Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listings        Listing[]
+  proposals       Proposal[]
+  receivedOrders  Order[]  @relation("OrderCreator")
+  reviews         Review[] @relation("CreatorReviews")
+  connectAccount  CreatorPaymentAccount?
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  parentId  String?
+  parent    Category? @relation("CategoryTree", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryTree")
+  listings  Listing[]
+  createdAt DateTime  @default(now())
+}
+
+model Listing {
+  id              String        @id @default(cuid())
+  creatorId       String
+  ownerUserId     String
+  categoryId      String?
+  type            ListingType
+  status          ListingStatus @default(DRAFT)
+  title           String
+  slug            String        @unique
+  summary         String
+  description     String        @db.Text
+  currency        String        @default("MWK")
+  price           Decimal       @db.Decimal(14, 2)
+  compareAtPrice  Decimal?      @db.Decimal(14, 2)
+  deliveryDays    Int?
+  stockQuantity   Int?
+  isDigital       Boolean       @default(false)
+  metadata        Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  creator         CreatorProfile @relation(fields: [creatorId], references: [id])
+  owner           User          @relation("ListingOwner", fields: [ownerUserId], references: [id])
+  category        Category?     @relation(fields: [categoryId], references: [id])
+  orderItems      OrderItem[]
+
+  @@index([status, type, categoryId])
+  @@index([creatorId, status])
+}
+
+model Brief {
+  id           String      @id @default(cuid())
+  clientId     String
+  title        String
+  description  String      @db.Text
+  categoryId   String?
+  budgetMin    Decimal?    @db.Decimal(14, 2)
+  budgetMax    Decimal?    @db.Decimal(14, 2)
+  currency     String      @default("MWK")
+  deadline     DateTime?
+  status       BriefStatus @default(OPEN)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  client       User        @relation("BriefClient", fields: [clientId], references: [id])
+  proposals    Proposal[]
+
+  @@index([status, createdAt])
+  @@index([clientId, status])
+}
+
+model Proposal {
+  id             String         @id @default(cuid())
+  briefId        String
+  creatorId      String
+  creatorUserId  String
+  coverMessage   String         @db.Text
+  amount         Decimal        @db.Decimal(14, 2)
+  currency       String         @default("MWK")
+  estimatedDays  Int?
+  status         ProposalStatus @default(SUBMITTED)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  brief          Brief          @relation(fields: [briefId], references: [id], onDelete: Cascade)
+  creator        CreatorProfile @relation(fields: [creatorId], references: [id])
+  creatorUser    User           @relation("ProposalCreator", fields: [creatorUserId], references: [id])
+  milestones     Milestone[]
+
+  @@unique([briefId, creatorId])
+  @@index([creatorId, status])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  buyerId         String
+  creatorId       String
+  status          OrderStatus @default(PENDING_PAYMENT)
+  currency        String
+  subtotal        Decimal     @db.Decimal(14, 2)
+  platformFee     Decimal     @default(0) @db.Decimal(14, 2)
+  providerFee     Decimal?    @db.Decimal(14, 2)
+  total           Decimal     @db.Decimal(14, 2)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  paidAt          DateTime?
+  buyer           User        @relation("OrderBuyer", fields: [buyerId], references: [id])
+  creator         CreatorProfile @relation("OrderCreator", fields: [creatorId], references: [id])
+  items           OrderItem[]
+  payments        Payment[]
+  milestones      Milestone[]
+  ledgerEntries   LedgerEntry[]
+
+  @@index([buyerId, createdAt])
+  @@index([creatorId, status])
+}
+
+model OrderItem {
+  id                String   @id @default(cuid())
+  orderId           String
+  listingId         String?
+  listingTitle      String
+  listingType       ListingType
+  description       String?
+  quantity          Int      @default(1)
+  unitPrice         Decimal  @db.Decimal(14, 2)
+  lineTotal         Decimal  @db.Decimal(14, 2)
+  creatorName       String
+  metadataSnapshot  Json?
+  order             Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  listing           Listing? @relation(fields: [listingId], references: [id], onDelete: SetNull)
+}
+
+model Milestone {
+  id          String          @id @default(cuid())
+  orderId     String?
+  proposalId  String?
+  title       String
+  description String?         @db.Text
+  amount      Decimal         @db.Decimal(14, 2)
+  currency    String
+  dueAt       DateTime?
+  status      MilestoneStatus @default(PENDING)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  order       Order?          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  proposal    Proposal?       @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id                String          @id @default(cuid())
+  orderId           String
+  provider          PaymentProvider @default(PAYCHANGU)
+  status            PaymentStatus   @default(PENDING)
+  txRef             String          @unique
+  providerReference String?
+  checkoutUrl       String?
+  amount            Decimal         @db.Decimal(14, 2)
+  currency          String
+  providerStatus    String?
+  verifiedAt        DateTime?
+  expiresAt         DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  webhookEvents     WebhookEvent[]
+
+  @@index([orderId, status])
+  @@index([status, createdAt])
+  @@unique([provider, providerReference])
+}
+
+model WebhookEvent {
+  id              String    @id @default(cuid())
+  provider        String
+  dedupeKey       String    @unique
+  eventType       String
+  txRef           String?
+  signatureValid  Boolean
+  payload         Json
+  processedAt     DateTime?
+  processingError String?   @db.Text
+  paymentId       String?
+  receivedAt      DateTime  @default(now())
+  payment         Payment?  @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@index([provider, txRef])
+  @@index([processedAt, receivedAt])
+}
+
+model LedgerEntry {
+  id          String          @id @default(cuid())
+  orderId     String
+  type        LedgerEntryType
+  amount      Decimal         @db.Decimal(14, 2)
+  currency    String
+  reference   String
+  description String?
+  createdAt   DateTime        @default(now())
+  order       Order           @relation(fields: [orderId], references: [id])
+
+  @@unique([type, reference])
+  @@index([orderId, createdAt])
+}
+
+model CreatorPaymentAccount {
+  id                    String   @id @default(cuid())
+  creatorId             String   @unique
+  provider              String   @default("PAYCHANGU")
+  connectStatus         String   @default("NOT_CONNECTED")
+  providerAccountId     String?
+  encryptedTokenRef     String?
+  connectedAt           DateTime?
+  lastVerifiedAt        DateTime?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  creator               CreatorProfile @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+}
+
+model Payout {
+  id                String       @id @default(cuid())
+  creatorId         String
+  provider          String       @default("PAYCHANGU")
+  status            PayoutStatus @default(QUEUED)
+  amount            Decimal      @db.Decimal(14, 2)
+  currency          String
+  providerReference String?      @unique
+  idempotencyKey    String       @unique
+  failureReason     String?      @db.Text
+  requestedAt       DateTime     @default(now())
+  processedAt       DateTime?
+  // Creator relation is intentionally added when payout ownership/ledger allocation
+  // is finalized with the provider settlement model.
+  @@index([creatorId, status, requestedAt])
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  subject   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+}
+
+model Message {
+  id             String      @id @default(cuid())
+  conversationId String
+  senderId       String
+  type           MessageType @default(TEXT)
+  body           String?     @db.Text
+  attachmentKey  String?
+  createdAt      DateTime    @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User        @relation("MessageSender", fields: [senderId], references: [id])
+  @@index([conversationId, createdAt])
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  authorId    String
+  targetId    String
+  creatorId   String
+  orderId     String?
+  rating      Int
+  comment     String?  @db.Text
+  createdAt   DateTime @default(now())
+  author      User     @relation("ReviewAuthor", fields: [authorId], references: [id])
+  target      User     @relation("ReviewTarget", fields: [targetId], references: [id])
+  creator     CreatorProfile @relation("CreatorReviews", fields: [creatorId], references: [id])
+  @@unique([authorId, orderId])
+  @@index([creatorId, createdAt])
+}
