@@ -19,7 +19,7 @@ The following instruments are relevant to NJIRA's proposed activities. Confirm c
 
 ### Data protection and privacy
 - **Data Protection Act, 2024 (Act No. 3 of 2024)**, commenced 3 June 2024 by Government Notice No. 40 of 2024.
-- Data Protection Authority (DPA) guidance, registration requirements and regulations, including the Data Protection (Registration) Regulations 2025, Data Protection (Data Processors Engagement) Regulations and breach-notification guidance.
+- Data Protection Authority (DPA) guidance, registration requirements and regulatory materials. The DPA's official downloads list registration and data-processors-engagement materials, while a separately surfaced registration-regulations page is labelled Draft 1. Verify the final Gazette text, commencement and current status directly with the DPA or Malawi counsel; do not treat consultation drafts as binding regulations.
 - The Act applies to processing in Malawi and can also apply to an overseas operator processing personal data of people in Malawi when offering goods/services or monitoring behaviour in Malawi.
 
 Required controls:
