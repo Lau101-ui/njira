@@ -29,6 +29,19 @@ enum LegalDocumentStatus {
   RETIRED
 }
 
+enum ConsentPurpose {
+  MARKETING_EMAIL
+  MARKETING_SMS
+  ANALYTICS
+  PERSONALIZATION
+  NON_ESSENTIAL_COOKIES
+}
+
+enum ConsentAction {
+  GRANTED
+  WITHDRAWN
+}
+
 enum DataSubjectRequestType {
   ACCESS
   RECTIFICATION
@@ -236,6 +249,7 @@ model User {
   digitalServiceOrders DigitalServiceOrder[]
   legalAcceptances   LegalAcceptance[]
   privacyRequests    DataSubjectRequest[] @relation("PrivacyRequestSubject")
+  consentEvents      ConsentEvent[]
 
   @@unique([authProvider, authSubject])
   @@index([status, createdAt])
@@ -820,4 +834,22 @@ model JurisdictionFeatureApproval {
 
   @@unique([countryCode, featureKey])
   @@index([countryCode, status])
+}
+
+
+/// Append-only, granular consent history. Contract performance must never depend
+/// on optional marketing, analytics or personalization consent.
+model ConsentEvent {
+  id                 String         @id @default(cuid())
+  userId             String?
+  purpose            ConsentPurpose
+  action             ConsentAction
+  noticeVersion      String
+  occurredAt         DateTime       @default(now())
+  collectionSource   String
+  evidenceReference  String?
+  user               User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, purpose, occurredAt])
+  @@index([purpose, occurredAt])
 }
