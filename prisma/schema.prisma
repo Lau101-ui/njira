@@ -117,6 +117,7 @@ model User {
   sentMessages      Message[]    @relation("MessageSender")
   reviewsWritten    Review[]     @relation("ReviewAuthor")
   reviewsReceived   Review[]     @relation("ReviewTarget")
+  conversationMemberships ConversationParticipant[]
 
   @@unique([authProvider, authSubject])
   @@index([status, createdAt])
@@ -156,6 +157,7 @@ model CreatorProfile {
   receivedOrders  Order[]  @relation("OrderCreator")
   reviews         Review[] @relation("CreatorReviews")
   connectAccount  CreatorPaymentAccount?
+  payouts         Payout[]
 }
 
 model Category {
@@ -378,8 +380,7 @@ model Payout {
   failureReason     String?      @db.Text
   requestedAt       DateTime     @default(now())
   processedAt       DateTime?
-  // Creator relation is intentionally added when payout ownership/ledger allocation
-  // is finalized with the provider settlement model.
+  creator           CreatorProfile @relation(fields: [creatorId], references: [id])
   @@index([creatorId, status, requestedAt])
 }
 
@@ -389,6 +390,19 @@ model Conversation {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   messages  Message[]
+  participants ConversationParticipant[]
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  userId         String
+  joinedAt       DateTime     @default(now())
+  lastReadAt     DateTime?
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([conversationId, userId])
+  @@index([userId, joinedAt])
 }
 
 model Message {
