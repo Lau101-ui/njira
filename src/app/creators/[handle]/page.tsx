@@ -12,7 +12,7 @@ export default async function CreatorPublicPage({ params }: { params: Promise<{ 
       listings: { where: { status: "ACTIVE" }, orderBy: { updatedAt: "desc" }, select: { id: true, title: true, slug: true, summary: true, description: true, price: true, currency: true, deliveryDays: true, type: true }, take: 60 } }
   }).catch(() => null) : null;
   if (!creator || creator.listings.length === 0) notFound();
-  const websiteUrl = creator.website && /^https?:\\/\\//i.test(creator.website) ? creator.website : null;
+  const websiteUrl = creator.website && /^https?:\/\//i.test(creator.website) ? creator.website : null;
   return <main className="creator-public-page">
     <header className="tools-topbar"><Link className="wordmark" href="/">NJIRA<span>®</span></Link><span className="tools-topbar-note">CREATOR PROFILE / {creator.countryCode}</span><Link className="tools-back-link" href="/creators">All creators ↗</Link></header>
     <section className="creator-profile-hero"><p className="eyebrow">NJIRA CREATOR / {creator.isVerified?"VERIFIED":"INDEPENDENT"}</p><div className="creator-profile-monogram">{creator.displayName.trim().charAt(0).toUpperCase()}</div><h1>{creator.displayName}{creator.isVerified&&<span className="verified-mark"> ✓</span>}</h1><p className="creator-profile-headline">{creator.headline||"Independent creative"}{creator.city?" · "+creator.city:""}</p>{creator.bio&&<p className="creator-profile-bio">{creator.bio}</p>}<div className="creator-profile-meta"><span>{creator.acceptingWork?"OPEN TO NEW WORK":"CURRENTLY UNAVAILABLE"}</span>{websiteUrl&&<a href={websiteUrl} target="_blank" rel="noopener noreferrer">PERSONAL WEBSITE ↗</a>}</div></section>
