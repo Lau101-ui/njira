@@ -24,6 +24,33 @@ Use Standard Checkout first. It redirects the buyer to PayChangu-hosted checkout
 9. In one database transaction, lock/update the payment and order idempotently, create ledger entries exactly once, and enqueue confirmation/fulfilment.
 10. Run a scheduled reconciliation job for pending payments because webhooks can fail or be delayed.
 
+## International checkout and currency handling
+
+PayChangu's current Standard Checkout API documents **MWK and USD** as the accepted transaction currencies. Its USD help article says USD collections settle to a USD wallet, and its international-card guidance says customers outside Malawi pay by Visa/Mastercard. This is USD collection, not universal multi-currency acquiring or automatic FX conversion.
+
+NJIRA should therefore:
+- Let creators publish a service price in either MWK or USD (initial supported marketplace currencies only).
+- Keep the listing/order currency fixed at checkout. A USD-priced service is charged as USD; an MWK-priced service is charged as MWK.
+- Show the buyer the exact charge currency and amount before redirecting to PayChangu. Their bank/card issuer may apply its own conversion and foreign-transaction fees when their card account is in another currency.
+- Store the provider-settled currency and amount separately from any display-only estimated conversion. Never use a display FX estimate as the amount to reconcile or settle.
+- Do not silently convert a creator's MWK price into USD at checkout. If NJIRA later offers buyer currency selection, lock a server-generated quote with rate source, timestamp, spread/markup, expiry and both source/charge amounts; re-quote after expiry.
+- Keep creator payable balances and platform revenue denominated by currency. Do not net MWK and USD balances together or imply an FX conversion unless an actual, reconciled conversion transaction has occurred.
+
+The current provider checkout adapter accepts whole-number amounts because PayChangu Standard Checkout documents an int32 amount. Confirm decimal/currency minor-unit behavior for USD with PayChangu in sandbox before enabling USD-priced listings; do not assume that USD cents are accepted merely because the API accepts a numeric amount.
+
+## Creator application fees
+
+If NJIRA charges creators to submit proposals to client briefs, treat that as a distinct platform service fee, not as an order payment or a deduction from creator earnings:
+- The server determines whether a fee applies and its amount/currency from versioned platform policy; browser input cannot set or waive it.
+- Create a proposal in a non-submitted/pending-payment state, create a payment with purpose `PROPOSAL_APPLICATION_FEE`, and only transition the proposal to `SUBMITTED` after server-side provider verification and atomic payment/ledger recording.
+- Enforce idempotency per proposal/application attempt and prevent multiple fee payments from submitting the same proposal.
+- Provide a clear fee disclosure, refund/cancellation policy and a free/waiver path if required by the product strategy. Avoid charging creators simply to express interest unless the fee genuinely funds a useful, transparent service; it can suppress marketplace liquidity and disadvantage early-career creatives.
+- Keep this fee separate from client-to-creator service checkout. The buyer pays for the commissioned work; the creator may separately pay NJIRA for an application feature only if the product policy explicitly requires it.
+
+## Provider capabilities to confirm before launch
+
+PayChangu's public docs currently describe USD checkout, international card acceptance, USD wallet settlement, US virtual bank accounts, and Connect commissions. They do not establish that NJIRA can automatically convert between MWK and USD, nor that a creator can withdraw USD to any arbitrary foreign bank account. Confirm account eligibility, USD wallet access, card-country restrictions, refund currency, fees, exchange rates, USD withdrawal rails and Connect split behavior directly with PayChangu. Keep international creator payouts disabled until verified.
+
 ## Important provider-documentation verification
 
 The PayChangu Webhooks guide describes HMAC-SHA256 over the raw webhook payload and the `Signature` header. The developer introduction also shows an example that serializes the `data` field before hashing and refers to a signature in the payload. These descriptions are not identical.
