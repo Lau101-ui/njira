@@ -98,3 +98,8 @@ Prisma Client is generated during dependency installation. Set a real PostgreSQL
 ## Authentication foundation
 
 NJIRA's Better Auth integration and its current launch gates are documented in [`docs/authentication.md`](docs/authentication.md). Registration remains disabled until verified email delivery is configured. Do not treat the auth scaffold as a production-ready account system.
+
+
+## Authentication and account onboarding
+
+NJIRA now includes Better Auth account screens, email verification and password-reset flows, a Resend transactional-email adapter, and creator/client profile onboarding. Public registration remains disabled until `RESEND_API_KEY` and `AUTH_EMAIL_FROM` are configured with a verified sender domain. See `docs/authentication.md` for deployment requirements. This is a staged foundation: no production migration has been applied and account/profile functionality must pass deployed end-to-end testing before public launch.

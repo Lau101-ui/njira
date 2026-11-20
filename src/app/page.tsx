@@ -10,7 +10,7 @@ export default function HomePage() {
     <header className="topbar">
       <Link className="wordmark" href="/" aria-label="NJIRA home">NJIRA<span>®</span></Link>
       <span className="topbar-note">A creative ecosystem / Malawi → Everywhere</span>
-      <div className="topbar-links"><Link className="tools-nav-link" href="/tools">Tools <span aria-hidden="true">↗</span></Link><a className="prototype-link" href="/prototype.html">View design prototype <span aria-hidden="true">↗</span></a></div>
+      <div className="topbar-links"><Link className="tools-nav-link" href="/login">Sign in</Link><Link className="tools-nav-link" href="/sign-up">Join NJIRA <span aria-hidden="true">↗</span></Link><Link className="tools-nav-link" href="/tools">Tools <span aria-hidden="true">↗</span></Link><a className="prototype-link" href="/prototype.html">View design prototype <span aria-hidden="true">↗</span></a></div>
     </header>
     <section className="hero">
       <div className="hero-copy">
