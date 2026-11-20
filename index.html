@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#17151D">
 <meta name="description" content="NJIRA connects Malawi's creative community to clients, services, products, tools and learning.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NJIRA — Find your next creative path">
+<meta property="og:description" content="Discover creative talent, services, products, tools and learning in one connected ecosystem.">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M4 27C5 8 19 26 27 5%27 fill=%27none%27 stroke=%27%23A9B7FF%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3Ccircle cx=%2727%27 cy=%275%27 r=%272.5%27 fill=%27%23FF715B%27/%3E%3C/svg%3E">
 <title>NJIRA — Find your next creative path</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +17,7 @@
 <style>
 :root{--ink:#17151D;--paper:#F3EFE6;--cream:#E6E0D5;--peri:#A9B7FF;--coral:#FF715B;--jade:#B5CFC7;--muted:#aaa5b0;--line:rgba(243,239,230,.17);--display:'Bricolage Grotesque',sans-serif;--body:'Figtree',sans-serif;--mono:'DM Mono',monospace}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:85px}body{margin:0;background:var(--ink);color:var(--paper);font:16px/1.55 var(--body);overflow-x:hidden}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--peri);outline-offset:4px}::selection{background:var(--peri);color:var(--ink)}
+.skip-link{position:fixed;left:16px;top:-60px;z-index:200;padding:10px 14px;background:var(--peri);color:var(--ink);font-weight:700}.skip-link:focus{top:12px}
 .top{height:76px;position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:rgba(23,21,29,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:10px;font:800 1.55rem var(--display);letter-spacing:-.08em}.brand svg{width:27px;height:27px}.brand small{font:9px var(--mono);letter-spacing:.12em;color:var(--peri);margin-left:3px}
 .nav{display:flex;gap:25px;align-items:center;font-size:.85rem;color:#c9c4ce}.nav a:hover{color:var(--peri)}.top-actions{display:flex;align-items:center;gap:16px}.quiet{font-size:.85rem;color:#d4ced8}.menu{display:none;background:none;border:0;color:var(--paper);font-size:1.5rem}
@@ -41,6 +47,7 @@ footer{background:#100f15;padding:65px 8vw 25px}.footer-main{display:flex;justif
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="top">
 <a class="brand" href="#top" aria-label="NJIRA home"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 27C5 8 19 26 27 5" fill="none" stroke="#A9B7FF" stroke-width="3" stroke-linecap="round"/><circle cx="27" cy="5" r="2.5" fill="#FF715B"/></svg>NJIRA<small>/ CREATIVE ECOSYSTEM</small></a>
 <nav class="nav" id="nav"><a href="#discover">Discover</a><a href="#marketplace">Marketplace</a><a href="#tools">Tools</a><a href="#learn">Learn</a><a href="#how">How it works</a></nav>
@@ -48,7 +55,7 @@ footer{background:#100f15;padding:65px 8vw 25px}.footer-main{display:flex;justif
 </header>
 <div class="path-rail" aria-hidden="true"><svg viewBox="0 0 28 245" preserveAspectRatio="none"><path d="M14 2 C2 35 26 48 14 80 S2 125 14 160 S26 205 14 243"/><path id="railProgress" d="M14 2 C2 35 26 48 14 80 S2 125 14 160 S26 205 14 243"/></svg><i class="rail-dot" id="railDot"></i></div>
 <div class="chapter-count" id="chapterCount"><b>01</b> / 06 &nbsp; THE START</div>
-<main id="top">
+<main id="main">
 <section class="hero" data-chapter="THE START">
 <div class="hero-copy-wrap">
 <div class="eyebrow">A creative ecosystem, connected</div>
@@ -143,7 +150,7 @@ nodeData.forEach((d,i)=>{const g=new THREE.Group(),orb=new THREE.Mesh(new THREE.
 const dustGeo=new THREE.BufferGeometry(),arr=new Float32Array(420);for(let i=0;i<arr.length;i++)arr[i]=(Math.random()-.5)*14;dustGeo.setAttribute('position',new THREE.BufferAttribute(arr,3));scene.add(new THREE.Points(dustGeo,new THREE.PointsMaterial({color:0xf3efe6,size:.025,transparent:true,opacity:.6})));
 let drag=false,lastX=0,rot=0,targetRot=0;canvas.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(drag){targetRot+=(e.clientX-lastX)*.008;lastX=e.clientX}});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);
 function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}resize();addEventListener('resize',resize);
-let tick=0;function render(){requestAnimationFrame(render);if(document.hidden)return;tick+=.006;rot+=(targetRot-rot)*.06;const progress=Math.min(1,Math.max(0,scrollY/(document.documentElement.scrollHeight-innerHeight)));const look=curve.getPointAt(.04+progress*.7),pos=curve.getPointAt(.02+progress*.68);camera.position.set(pos.x+2.1*Math.cos(rot),pos.y+1.1+Math.sin(tick)*.08,pos.z+2.8);camera.lookAt(look.x,look.y,look.z-1);nodes.forEach((n,i)=>{n.rotation.y=tick*(i%2?-.7:.7);n.rotation.x=Math.sin(tick+i)*.2});renderer.render(scene,camera)}render()}
+let tick=0;function render(){if(!reduced)requestAnimationFrame(render);if(document.hidden)return;tick+=.006;rot+=(targetRot-rot)*.06;const progress=Math.min(1,Math.max(0,scrollY/(document.documentElement.scrollHeight-innerHeight)));const look=curve.getPointAt(.04+progress*.7),pos=curve.getPointAt(.02+progress*.68);camera.position.set(pos.x+2.1*Math.cos(rot),pos.y+1.1+Math.sin(tick)*.08,pos.z+2.8);camera.lookAt(look.x,look.y,look.z-1);nodes.forEach((n,i)=>{n.rotation.y=tick*(i%2?-.7:.7);n.rotation.x=Math.sin(tick+i)*.2});renderer.render(scene,camera)}render()}
 try{init3d()}catch(e){$('#hero3d').style.display='none'}
 })();
 </script>
