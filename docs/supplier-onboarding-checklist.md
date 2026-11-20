@@ -47,3 +47,40 @@ Use one checklist per supplier and per product/plan. A supplier being approved d
 - [ ] Plan isActive enabled only after plan-specific approval.
 - [ ] Support and finance owners assigned.
 - [ ] Monitoring and reconciliation are enabled.
+
+
+## Application workflow and evidence handling
+
+The current Prisma schema includes `SupplierApplication` and append-only
+`SupplierApplicationReviewEvent` records. This is a data contract, not a live
+supplier portal or approval process.
+
+### Applicant submission
+- [ ] Applicant is authenticated and can access only their own draft/application.
+- [ ] Legal business name, operating country, registration/tax details and business address are collected only where necessary.
+- [ ] Contact person and verified business contact channels are recorded.
+- [ ] Products/brands, source of supply, reseller/distribution authority and target countries are declared.
+- [ ] Regional restrictions, proposed fulfilment, settlement currencies, refunds and support process are documented.
+- [ ] Evidence is uploaded to a private encrypted document store; the database stores opaque evidence references only.
+- [ ] Applicant confirms that information is accurate and that NJIRA may verify it.
+- [ ] Submission freezes the submitted snapshot; later changes are versioned/audited.
+
+### Internal review
+- [ ] Only an authenticated, authorised compliance/operations reviewer can read evidence or change application status.
+- [ ] Reviewer verifies the legal entity and contact independently using authoritative sources where available.
+- [ ] Reviewer checks ownership/source of products and the exact scope/territory/term of resale authority.
+- [ ] Reviewer checks each product, country, plan, delivery method and refund route separately.
+- [ ] Reviewer records a reason code and concise decision note for every state change.
+- [ ] Requests for information return the application to the applicant without granting catalogue or fulfilment access.
+- [ ] Approval creates or links a supplier record but does not automatically activate any product or plan.
+- [ ] A separate product/plan launch review is required before publication or sale.
+- [ ] Rejected applications retain a reasoned audit record and can be resubmitted only through a controlled process.
+
+### Security and retention
+- [ ] Do not store identity documents, bank statements, tax certificates, API secrets or full contracts in ordinary database text fields.
+- [ ] Evidence references must be non-guessable and access-checked on every read.
+- [ ] Record privileged evidence access and every decision event.
+- [ ] Define retention and deletion periods with counsel; preserve records only as long as justified.
+- [ ] Do not expose internal notes, reviewer identities, evidence references or supplier costs through public catalogue APIs.
+
+**Implementation boundary:** schema models have been added, but no supplier application API, upload vault, staff authentication/RBAC, review UI, migration or end-to-end tests exist yet. Do not accept real supplier applications until those controls are implemented and reviewed.
