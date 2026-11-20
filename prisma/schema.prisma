@@ -13,6 +13,63 @@ enum UserStatus {
   DELETED
 }
 
+enum LegalDocumentType {
+  TERMS_OF_SERVICE
+  PRIVACY_NOTICE
+  COOKIE_NOTICE
+  CREATOR_AGREEMENT
+  CLIENT_AGREEMENT
+  SUPPLIER_AGREEMENT
+  DIGITAL_CONTENT_CONSENT
+}
+
+enum LegalDocumentStatus {
+  DRAFT
+  PUBLISHED
+  RETIRED
+}
+
+enum DataSubjectRequestType {
+  ACCESS
+  RECTIFICATION
+  ERASURE
+  PORTABILITY
+  RESTRICTION
+  OBJECTION
+  WITHDRAW_CONSENT
+  COMPLAINT
+}
+
+enum DataSubjectRequestStatus {
+  RECEIVED
+  IDENTITY_CHECK
+  IN_PROGRESS
+  ON_HOLD_LEGAL_RETENTION
+  COMPLETED
+  REJECTED_WITH_REASON
+}
+
+enum ComplianceIncidentSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ComplianceIncidentStatus {
+  OPEN
+  INVESTIGATING
+  CONTAINED
+  REPORTED
+  CLOSED
+}
+
+enum JurisdictionApprovalStatus {
+  PENDING
+  APPROVED
+  BLOCKED
+}
+
 enum ListingType {
   SERVICE
   DIGITAL_PRODUCT
@@ -177,6 +234,8 @@ model User {
   reviewsReceived   Review[]     @relation("ReviewTarget")
   conversationMemberships ConversationParticipant[]
   digitalServiceOrders DigitalServiceOrder[]
+  legalAcceptances   LegalAcceptance[]
+  privacyRequests    DataSubjectRequest[] @relation("PrivacyRequestSubject")
 
   @@unique([authProvider, authSubject])
   @@index([status, createdAt])
@@ -320,6 +379,12 @@ model Order {
   platformFeeRate Decimal     @default(0) @db.Decimal(7, 6)
   /// Actual provider fee once confirmed from provider settlement/reconciliation.
   providerFee     Decimal?    @db.Decimal(14, 2)
+  /// Immutable legal disclosure snapshots for the transaction.
+  sellerOfRecordName String?
+  sellerOfRecordCountryCode String?
+  sellerRole      String?
+  termsVersion    String?
+  privacyNoticeVersion String?
   total           Decimal     @db.Decimal(14, 2)
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -606,6 +671,15 @@ model DigitalServiceOrder {
   customerAccountRef    String?
   idempotencyKey        String                    @unique
   supplierOrderRef      String?
+  /// Immutable legal-role snapshot: identify who actually sells/supplies this SKU.
+  sellerOfRecordName    String?
+  sellerOfRecordCountryCode String?
+  sellerRole            String?
+  termsVersion          String?
+  privacyNoticeVersion  String?
+  /// Record only where the user expressly requests/consents to early digital delivery.
+  digitalContentConsentAt DateTime?
+  digitalContentConsentVersion String?
   paidAt                DateTime?
   fulfilledAt           DateTime?
   createdAt             DateTime                  @default(now())
@@ -643,3 +717,107 @@ model DigitalServiceFulfillment {
   @@index([status, createdAt])
 }
 
+
+
+/// Immutable, versioned legal notice or agreement published by NJIRA.
+model LegalDocumentVersion {
+  id             String             @id @default(cuid())
+  type           LegalDocumentType
+  version        String
+  locale         String             @default("en")
+  status         LegalDocumentStatus @default(DRAFT)
+  title          String
+  documentUrl    String
+  contentSha256  String
+  effectiveAt    DateTime?
+  publishedAt    DateTime?
+  retiredAt      DateTime?
+  createdAt      DateTime           @default(now())
+  acceptances    LegalAcceptance[]
+
+  @@unique([type, version, locale])
+  @@index([type, status, effectiveAt])
+}
+
+/// Append-only record that a user accepted a specific published document version.
+/// Store only a minimised IP hash if legally justified; never store raw IP here.
+model LegalAcceptance {
+  id                String   @id @default(cuid())
+  userId            String?
+  documentVersionId String
+  acceptedAt        DateTime @default(now())
+  context           String
+  transactionRef    String?
+  ipAddressHash     String?
+  userAgentSummary  String?
+  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  documentVersion  LegalDocumentVersion @relation(fields: [documentVersionId], references: [id], onDelete: Restrict)
+
+  @@index([userId, acceptedAt])
+  @@index([documentVersionId, acceptedAt])
+  @@index([transactionRef])
+}
+
+/// Data-subject request workflow. Keep identity evidence outside this table in an
+/// encrypted case store; subjectReferenceHash is a keyed, non-reversible reference.
+model DataSubjectRequest {
+  id                    String                    @id @default(cuid())
+  userId                String?
+  subjectReferenceHash  String
+  type                  DataSubjectRequestType
+  status                DataSubjectRequestStatus  @default(RECEIVED)
+  receivedAt            DateTime                  @default(now())
+  targetResponseAt      DateTime?
+  identityVerifiedAt    DateTime?
+  completedAt            DateTime?
+  outcomeCode           String?
+  secureCaseReference   String?
+  legalHoldReasonCode   String?
+  assignedTo            String?
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  user                  User?                     @relation("PrivacyRequestSubject", fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([status, receivedAt])
+  @@index([subjectReferenceHash, receivedAt])
+}
+
+/// Security/privacy incident register. Do not put credentials or unnecessary personal
+/// data in summaries; keep evidence in a restricted incident vault.
+model ComplianceIncident {
+  id                       String                     @id @default(cuid())
+  incidentReference        String                     @unique
+  severity                 ComplianceIncidentSeverity
+  status                   ComplianceIncidentStatus   @default(OPEN)
+  detectedAt               DateTime
+  awarenessAt              DateTime?
+  containedAt              DateTime?
+  authorityNotifiedAt      DateTime?
+  affectedSubjectsNotifiedAt DateTime?
+  closedAt                 DateTime?
+  summary                  String                     @db.Text
+  reportabilityDecision    String?
+  secureEvidenceReference  String?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+
+  @@index([status, severity, detectedAt])
+}
+
+/// Feature/country release gate. A missing or non-approved record must fail closed.
+model JurisdictionFeatureApproval {
+  id                 String                       @id @default(cuid())
+  countryCode        String
+  featureKey         String
+  status             JurisdictionApprovalStatus   @default(PENDING)
+  legalReviewRef     String?
+  approvedBy         String?
+  approvedAt         DateTime?
+  reviewDueAt        DateTime?
+  notes              String?                      @db.Text
+  createdAt          DateTime                     @default(now())
+  updatedAt          DateTime                     @updatedAt
+
+  @@unique([countryCode, featureKey])
+  @@index([countryCode, status])
+}
