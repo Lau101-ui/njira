@@ -6,14 +6,16 @@ import { prisma } from "@/server/db";
 const appUrl = process.env.BETTER_AUTH_URL;
 const secret = process.env.BETTER_AUTH_SECRET;
 
-if (process.env.NODE_ENV === "production" && (!appUrl || !secret)) {
+const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+if (process.env.NODE_ENV === "production" && !isProductionBuild && (!appUrl || !secret)) {
   throw new Error("BETTER_AUTH_URL and BETTER_AUTH_SECRET must be configured in production.");
 }
 
 export const auth = betterAuth({
   appName: "NJIRA",
   baseURL: appUrl,
-  secret,
+  secret: secret ?? (isProductionBuild ? "build-only-secret-not-valid-at-runtime" : undefined),
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   trustedOrigins: appUrl ? [appUrl] : ["http://localhost:3000"],
   emailAndPassword: {
