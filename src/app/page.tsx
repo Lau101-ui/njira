@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const pathways = [
   { number: "01", title: "Find creative talent", description: "Discover photographers, filmmakers, designers, developers and other independent creatives.", status: "Marketplace foundation" },
   { number: "02", title: "Equip your practice", description: "Explore the software, AI services and infrastructure that help creative work move forward.", status: "Supplier verification required" },
@@ -6,7 +8,7 @@ const pathways = [
 export default function HomePage() {
   return <main>
     <header className="topbar">
-      <a className="wordmark" href="/" aria-label="NJIRA home">NJIRA<span>®</span></a>
+      <Link className="wordmark" href="/" aria-label="NJIRA home">NJIRA<span>®</span></Link>
       <span className="topbar-note">A creative ecosystem / Malawi → Everywhere</span>
       <a className="prototype-link" href="/prototype.html">View design prototype <span aria-hidden="true">↗</span></a>
     </header>
@@ -27,6 +29,6 @@ export default function HomePage() {
       <div className="section-heading"><p className="eyebrow">THE NJIRA ECOSYSTEM</p><h2>One place.<br /><em>More possibilities.</em></h2><p className="section-intro">NJIRA is being built as more than a directory. Each pathway is designed to connect to the next, so creative work can move with less friction.</p></div>
       <div className="pathway-list">{pathways.map(item => <article className="pathway-card" key={item.number}><span className="card-number">{item.number}</span><div><h3>{item.title}</h3><p>{item.description}</p></div><span className="card-status">{item.status}</span><span className="card-arrow" aria-hidden="true">↗</span></article>)}</div>
     </section>
-    <footer className="site-footer"><a className="wordmark" href="/">NJIRA<span>®</span></a><p>THE PATH IS BEING BUILT.</p><span>© {new Date().getFullYear()} NJIRA</span></footer>
+    <footer className="site-footer"><Link className="wordmark" href="/">NJIRA<span>®</span></Link><p>THE PATH IS BEING BUILT.</p><span>© {new Date().getFullYear()} NJIRA</span></footer>
   </main>;
 }
