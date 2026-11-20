@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const pathways = [
-  { number: "01", title: "Find creative talent", description: "Discover photographers, filmmakers, designers, developers and other independent creatives.", status: "Marketplace foundation" },
+  { number: "01", title: "Find creative talent", description: "Discover photographers, filmmakers, designers, developers and other independent creatives.", status: "Explore creator profiles ↗" },
   { number: "02", title: "Equip your practice", description: "Explore the software, AI services and infrastructure that help creative work move forward.", status: "Explore tools catalogue ↗" },
   { number: "03", title: "Build something together", description: "A clearer path from a project brief to proposals, delivery and a lasting working relationship.", status: "Workflow in development" }
 ];
@@ -10,7 +10,7 @@ export default function HomePage() {
     <header className="topbar">
       <Link className="wordmark" href="/" aria-label="NJIRA home">NJIRA<span>®</span></Link>
       <span className="topbar-note">A creative ecosystem / Malawi → Everywhere</span>
-      <div className="topbar-links"><Link className="tools-nav-link" href="/login">Sign in</Link><Link className="tools-nav-link" href="/sign-up">Join NJIRA <span aria-hidden="true">↗</span></Link><Link className="tools-nav-link" href="/tools">Tools <span aria-hidden="true">↗</span></Link><a className="prototype-link" href="/prototype.html">View design prototype <span aria-hidden="true">↗</span></a></div>
+      <div className="topbar-links"><Link className="tools-nav-link" href="/login">Sign in</Link><Link className="tools-nav-link" href="/sign-up">Join NJIRA <span aria-hidden="true">↗</span></Link><Link className="tools-nav-link" href="/tools">Tools <span aria-hidden="true">↗</span></Link><Link className="tools-nav-link" href="/creators">Creators <span aria-hidden="true">↗</span></Link><a className="prototype-link" href="/prototype.html">View design prototype <span aria-hidden="true">↗</span></a></div>
     </header>
     <section className="hero">
       <div className="hero-copy">
@@ -27,7 +27,7 @@ export default function HomePage() {
     </section>
     <section className="pathways" id="pathways">
       <div className="section-heading"><p className="eyebrow">THE NJIRA ECOSYSTEM</p><h2>One place.<br /><em>More possibilities.</em></h2><p className="section-intro">NJIRA is being built as more than a directory. Each pathway is designed to connect to the next, so creative work can move with less friction.</p></div>
-      <div className="pathway-list">{pathways.map(item => <article className="pathway-card" key={item.number}><span className="card-number">{item.number}</span><div><h3>{item.title}</h3><p>{item.description}</p></div><span className="card-status">{item.status}</span>{item.number === "02" ? <Link className="card-arrow" href="/tools" aria-label="Explore the tools catalogue">↗</Link> : <span className="card-arrow" aria-hidden="true">↗</span>}</article>)}</div>
+      <div className="pathway-list">{pathways.map(item => <article className="pathway-card" key={item.number}><span className="card-number">{item.number}</span><div><h3>{item.title}</h3><p>{item.description}</p></div><span className="card-status">{item.status}</span>{item.number === "02" ? <Link className="card-arrow" href="/tools" aria-label="Explore the tools catalogue">↗</Link> : item.number === "01" ? <Link className="card-arrow" href="/creators" aria-label="Discover creators">↗</Link> : <span className="card-arrow" aria-hidden="true">↗</span>}</article>)}</div>
     </section>
     <footer className="site-footer"><Link className="wordmark" href="/">NJIRA<span>®</span></Link><p>THE PATH IS BEING BUILT.</p><span>© {new Date().getFullYear()} NJIRA</span></footer>
   </main>;
