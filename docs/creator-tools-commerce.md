@@ -72,3 +72,8 @@ Never market shared accounts, cracked software, account rentals, region-mismatch
 Start with a small, verified catalogue rather than dozens of unverified logos. Suggested discovery candidates (not launch promises): creator editing/design tools, selected AI services, domains and hosting. Each candidate needs a country/region and fulfilment check before being listed.
 
 The initial build adds the domain model and operational rules only. It does not yet provide a live supplier integration, fulfilment automation, subscription renewal engine, or production checkout UI.
+
+
+## Commercial model
+
+Use the proposed fee policy in [revenue-model-and-launch-fees.md](./revenue-model-and-launch-fees.md) when designing checkout, order snapshots and ledger postings. Tool prices must be approved per SKU from verified supplier and cost-to-serve data; a simple retail-minus-supplier spread is not net profit. Do not activate a plan until its contribution margin and fulfilment route are validated.
