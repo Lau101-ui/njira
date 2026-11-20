@@ -32,7 +32,7 @@ Open `index.html` in a modern browser. It is the current unified experience and 
 
 The marketplace cards and creator examples are illustrative, not live listings. Stock photography is used as temporary art direction and must be replaced or supplemented with properly licensed creator-owned media before launch. Tool listings and pricing should be verified before publication.
 
-Authentication, database, messaging, project briefs, proposals, milestones, file storage, checkout, PayChangu payment processing, seller payouts, subscriptions, admin controls, and production security are **not implemented** in this frontend prototype. The `foundation/marketplace-paychangu` branch adds an initial Prisma data model, architecture decisions, and a server-side PayChangu adapter as engineering groundwork; these are not yet wired into a running application. The early-access button only explains this limitation; it does not collect user data.
+Authentication, database, messaging, project briefs, proposals, milestones, file storage, checkout, PayChangu payment processing, seller payouts, subscriptions, admin controls, and production security are **not implemented** in this frontend prototype. The `foundation/marketplace-paychangu` branch adds an initial Prisma data model, architecture decisions, a server-side PayChangu adapter, security baseline, repository safeguards and CI checks as engineering groundwork; these are not yet wired into a running application. The early-access button only explains this limitation; it does not collect user data.
 
 ## Running
 
